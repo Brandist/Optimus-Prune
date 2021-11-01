@@ -10,6 +10,7 @@ class GPSService {
         GPS gps;
     public:
         GPSService();
+        int convertRawDataToVectors(int raw_data);
         bool requestData();
 };
 
