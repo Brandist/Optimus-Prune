@@ -1,5 +1,5 @@
 // This is just the interface of the corresponding service class
-#include "/home/sfp/Documents/source/repos/SLAM_API/src/cpp/Ihardware/Lidar.h"
+#include "../Ihardware/Lidar.h"
 
 #ifndef _lidarservice_h
 #define _lidarservice_h
@@ -9,7 +9,8 @@ class LidarService {
         Lidar lidar;
     public:
         LidarService();
-        bool requestData();
+        int convertRawDataToVectors(int raw_data);
+        int requestData();
 };
 
 #endif

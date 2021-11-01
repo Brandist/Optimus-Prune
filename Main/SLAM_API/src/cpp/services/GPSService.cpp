@@ -3,8 +3,8 @@
 
 #include <iostream>
 #include <string>
-#include "/home/sfp/Documents/source/repos/SLAM_API/src/cpp/Iservices/IGPSService.h"
-#include "/home/sfp/Documents/source/repos/SLAM_API/src/cpp/Ihardware/GPS.h"
+#include "../Iservices/IGPSService.h"
+#include "../Ihardware/GPS.h"
 
 using namespace std;
 

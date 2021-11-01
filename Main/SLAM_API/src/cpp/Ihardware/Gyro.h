@@ -5,10 +5,12 @@
 
 class Gyro {
     private:
-
+        int data;
     public:
         Gyro();
-        bool readRawData();
+        int readRawData();
+        void setData(int data);
+        int getData();
 };
 
 #endif

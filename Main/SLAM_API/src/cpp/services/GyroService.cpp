@@ -3,8 +3,8 @@
 
 #include <iostream>
 #include <string>
-#include "/home/sfp/Documents/source/repos/SLAM_API/src/cpp/Iservices/IGyroService.h"
-#include "/home/sfp/Documents/source/repos/SLAM_API/src/cpp/Ihardware/Gyro.h"
+#include "../Iservices/IGyroService.h"
+#include "../Ihardware/Gyro.h"
 
 using namespace std;
 
