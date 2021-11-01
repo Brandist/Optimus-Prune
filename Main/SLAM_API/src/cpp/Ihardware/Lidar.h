@@ -5,10 +5,12 @@
 
 class Lidar {
     private:
-
+        int data;
     public:
         Lidar();
-        bool readRawData();
+        int readRawData();
+        void setData(int data);
+        int getData();
 };
 
 #endif
