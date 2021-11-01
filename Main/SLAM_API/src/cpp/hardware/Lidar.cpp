@@ -4,7 +4,7 @@
 
 #include <iostream>
 #include <string>
-#include "/home/sfp/Documents/source/repos/SLAM_API/src/cpp/Ihardware/Lidar.h"
+#include "../Ihardware/Lidar.h"
 
 using namespace std;
 
@@ -12,7 +12,20 @@ Lidar::Lidar(){
 
 }
 
-bool Lidar::readRawData(){
+int Lidar::readRawData(){
     // request the other API for reading data, send the raw data back to service
-    return false;
+    setData(10);
+    int data = getData();
+    return data;
+}
+
+// This should be the raw data from the GPS
+// Setting the raw data should not be necessary
+void Lidar::setData(int data){
+    this->data = data;
+}
+
+// This should be the raw data from the GPS
+int Lidar::getData(){
+    return this->data;
 }

@@ -4,7 +4,7 @@
 
 #include <iostream>
 #include <string>
-#include "/home/sfp/Documents/source/repos/SLAM_API/src/cpp/Ihardware/Gyro.h"
+#include "../Ihardware/Gyro.h"
 
 using namespace std;
 
@@ -12,7 +12,19 @@ Gyro::Gyro(){
 
 }
 
-bool Gyro::readRawData(){
+int Gyro::readRawData(){
     // request the other API for reading data, send the raw data back to service
-    return false;
+    int data = getData();
+    return data;
+}
+
+// This should be the raw data from the GPS
+// Setting the raw data should not be necessary
+void Gyro::setData(int data){
+    this->data = data;
+}
+
+// This should be the raw data from the GPS
+int Gyro::getData(){
+    return this->data;
 }

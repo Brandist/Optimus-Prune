@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
-#include "/home/sfp/Documents/source/repos/SLAM_API/src/cpp/Icontrollers/IGyroController.h"
-#include "/home/sfp/Documents/source/repos/SLAM_API/src/cpp/Iservices/IGyroService.h"
+#include "../Icontrollers/IGyroController.h"
+#include "../Iservices/IGyroService.h"
 
 using namespace std;
 

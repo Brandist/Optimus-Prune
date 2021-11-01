@@ -3,8 +3,8 @@
 
 #include <iostream>
 #include <string>
-#include "/home/sfp/Documents/source/repos/SLAM_API/src/cpp/Iservices/ILidarService.h"
-#include "/home/sfp/Documents/source/repos/SLAM_API/src/cpp/Ihardware/Lidar.h"
+#include "../Iservices/ILidarService.h"
+#include "../Ihardware/Lidar.h"
 
 using namespace std;
 
@@ -12,9 +12,15 @@ LidarService::LidarService() {
 
 }
 
-bool LidarService::requestData(){
+// This should be the conversion from raw data to SLAM-readable data (which will be a list of vectors I think)
+int LidarService::convertRawDataToVectors(int raw_data){
+    return raw_data;
+}
+
+int LidarService::requestData(){
     // Call the hardware layer to get the raw data
-    // Do something with raw data to make it something where we can work with
-    bool data = lidar.readRawData();
-    return false;
+    int data = lidar.readRawData();
+    int vector_data = convertRawDataToVectors(data);
+    // return a list of vector data
+    return vector_data;
 }
