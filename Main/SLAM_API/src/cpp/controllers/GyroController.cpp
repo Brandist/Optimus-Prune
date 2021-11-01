@@ -10,8 +10,10 @@ GyroController::GyroController() {
 }
 
 // Instead of bool, the return value must be something SLAM can work with
+// Todo:
+// - change output
+// - Add some kind of exception handling
 int GyroController::requestData(){
-    int validation = gyro_service.requestData();
-    // Do something here with validation, what to do when something goes wrong
-    return validation;
+    int data = gyro_service.requestData();
+    return data;
 }

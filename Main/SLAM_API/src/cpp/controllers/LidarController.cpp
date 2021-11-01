@@ -9,9 +9,11 @@ LidarController::LidarController() {
 
 }
 
-// Instead of bool, the return value must be something SLAM can work with
+// Output: Matrix or list of vectors, something that SLAM can work with
+// Todo:
+// - change output
+// - Add some kind of exception handling
 int LidarController::requestData(){
-    int validation = lidar_service.requestData();
-    // Do something here with validation, what to do when something goes wrong
-    return validation;
+    int data = lidar_service.requestData();
+    return data;
 }
