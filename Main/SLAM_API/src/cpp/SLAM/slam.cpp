@@ -4,10 +4,7 @@
 
 using namespace std;
 
-Slam::Slam(int gps_data, int gyro_data, int lidar_data){
-    this->gps_data = gps_data;
-    this->gyro_data = gyro_data;
-    this->lidar_data = lidar_data;
+Slam::Slam(){
 }
 
 bool Slam::start(){

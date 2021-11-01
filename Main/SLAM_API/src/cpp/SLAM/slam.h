@@ -9,7 +9,7 @@ class Slam {
         int gyro_data;
         int lidar_data;
     public:
-        Slam(int gps_data, int gyro_data, int lidar_data);
+        Slam();
         bool start();
         bool doSomethingWithGPSData();
         bool doSomethingWithLidarData();
