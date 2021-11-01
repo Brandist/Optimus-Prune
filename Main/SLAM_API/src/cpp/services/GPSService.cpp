@@ -12,14 +12,15 @@ GPSService::GPSService() {
     
 }
 
+// Not sure yet what type of data this will be, GPS data for SLAM must likely will be a 3d Vector, ask Brandon
 int GPSService::convertRawDataToVectors(int raw_data){
     return raw_data;
 }
 
-bool GPSService::requestData(){
+int GPSService::requestData(){
     // Call the hardware layer to get the raw data
     // Do something with raw data to make it something where we can work with
     int data = gps.readRawData();
     int gps_data = convertRawDataToVectors(data);
-    return false;
+    return gps_data;
 }

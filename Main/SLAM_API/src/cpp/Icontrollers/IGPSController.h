@@ -9,7 +9,7 @@ class GPSController {
         GPSService gps_service;
     public:
         GPSController();
-        bool requestData();
+        int requestData();
 };
 
 #endif

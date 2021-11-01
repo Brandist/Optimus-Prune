@@ -11,7 +11,7 @@ class GPSService {
     public:
         GPSService();
         int convertRawDataToVectors(int raw_data);
-        bool requestData();
+        int requestData();
 };
 
 #endif

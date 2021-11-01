@@ -10,8 +10,8 @@ GPSController::GPSController(){
 }
 
 // Instead of bool, the return value must be something SLAM can work with
-bool GPSController::requestData(){
-    bool validation = gps_service.requestData();
+int GPSController::requestData(){
+    int validation = gps_service.requestData();
     
     // Do something here with validation, what to do when something goes wrong
     return validation;
