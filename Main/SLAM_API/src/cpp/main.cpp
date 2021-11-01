@@ -1,12 +1,15 @@
 #include <iostream>
-#include "/home/sfp/Documents/source/repos/SLAM_API/src/cpp/Icontrollers/IGPSController.h"
-#include "/home/sfp/Documents/source/repos/SLAM_API/src/cpp/Icontrollers/IGyroController.h"
-#include "/home/sfp/Documents/source/repos/SLAM_API/src/cpp/Icontrollers/ILidarController.h"
+#include "Icontrollers/IGPSController.h"
+#include "Icontrollers/IGyroController.h"
+#include "Icontrollers/ILidarController.h"
 
 using namespace std;
 
 int main() {
-    GPSController cont;
-    bool d = cont.requestData();
+    GPSController gps_cont;
+    GyroController gyro_cont;
+    LidarController lidar_cont;
+
+    int d = lidar_cont.requestData();
     cout << d << endl;
 }
