@@ -14,6 +14,7 @@ GPS::GPS(){
 
 int GPS::readRawData(){
     // request the other API for reading data, send the raw data back to service
+    setData(10); // dummy data, data type is not accuracte ofcourse
     int data = getData();
     return data;
 }
