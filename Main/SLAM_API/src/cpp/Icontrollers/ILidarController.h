@@ -1,4 +1,5 @@
 // This is just the interface of the corresponding controller class
+#include <Eigen/Core>
 #include "../Iservices/ILidarService.h"
 
 #ifndef _lidarcontroller_h
@@ -9,7 +10,7 @@ class LidarController {
         LidarService lidar_service;
     public:
         LidarController();
-        int requestData();
+        Eigen::Matrix3Xf requestData();
 };
 
 #endif
