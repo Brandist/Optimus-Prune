@@ -1,19 +1,33 @@
 #include <iostream>
 #include <string>
+#include <Eigen/Core>
 #include "slam.h"
+#include "../Icontrollers/IGPSController.h"
+#include "../Icontrollers/IGyroController.h"
+#include "../Icontrollers/ILidarController.h"
 
 using namespace std;
 
-Slam::Slam(){
+Slam::Slam(GPSController gps_cont, GyroController gyro_cont, LidarController lidar_cont){
+    this->gps_cont = gps_cont;
+    this->gyro_cont = gyro_cont;
+    this->lidar_cont = lidar_cont;
 }
 
 bool Slam::start(){
+    setLidarData(lidar_cont.requestData());
+
     bool gps_result = doSomethingWithGPSData();
     bool lidar_result = doSomethingWithLidarData();
     bool gyro_result = doSomethingWithGyroData();
     return false;
 }
 
+// TODO:
+// - make classes for the 3 components, each with their needed methods and calculations:
+//     - GPS   
+//     - Gyro
+//     - Lidar
 bool Slam::doSomethingWithGPSData(){
     int data = getGPSData();
     cout << data << endl;
@@ -27,7 +41,7 @@ bool Slam::doSomethingWithGyroData(){
 }
 
 bool Slam::doSomethingWithLidarData(){
-    int data = getLidarData();
+    Eigen::Matrix3Xf data = getLidarData();
     cout << data << endl;
     return false;
 }
@@ -51,10 +65,10 @@ int Slam::getGyroData(){
 }
 
 // Setting the data should not be necessary
-void Slam::setLidarData(int lidar_data){
+void Slam::setLidarData(Eigen::Matrix3Xf lidar_data){
     this->lidar_data = lidar_data;
 }
 
-int Slam::getLidarData(){
+Eigen::Matrix3Xf Slam::getLidarData(){
     return this->lidar_data;
 }
