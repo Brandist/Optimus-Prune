@@ -12,7 +12,9 @@ int main() {
     LidarController lidar_cont;
 
     int gps_data = gps_cont.requestData();
+    int gyro_data = gyro_cont.requestData();
     int lidar_data = lidar_cont.requestData();
 
-    Slam dummy_slam(gps_data, lidar_data);
+    Slam dummy_slam(gps_data, gyro_data, lidar_data);
+    dummy_slam.start();
 }
