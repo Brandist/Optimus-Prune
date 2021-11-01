@@ -10,7 +10,7 @@ class GyroService {
         Gyro gyro;
     public:
         GyroService();
-        bool requestData();
+        int requestData();
 };
 
 #endif

@@ -9,7 +9,7 @@ class GyroController {
         GyroService gyro_service;
     public:
         GyroController();
-        bool requestData();
+        int requestData();
 };
 
 #endif

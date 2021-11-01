@@ -12,9 +12,9 @@ GyroService::GyroService() {
 
 }
 
-bool GyroService::requestData(){
+int GyroService::requestData(){
     // Call the hardware layer to get the raw data
     // Do something with raw data to make it something where we can work with
-    bool data = gyro.readRawData();
+    int data = gyro.readRawData();
     return false;
 }
