@@ -6,19 +6,19 @@
 #include "../Iservices/ILidarService.h"
 #include "../Ihardware/Lidar.h"
 
-using namespace std;
+using namespace services;
 
 LidarService::LidarService() {
 
 }
 
-// The conversion from raw data to SLAM-readable data (which will be a list of vectors or a matrix)
-// Input: raw Lidar data, from the PCL
-// Output: Matrix or list of vectors containing the x y z coordinates
+/* The conversion from raw data to SLAM-readable data
+ Input: raw Lidar data, from the PCL
+ Output: Matrix or list of vectors containing the x y z coordinates */
 Eigen::Matrix3Xf LidarService::convertRawDataToMatrix(){
     // raw_data contains all the points in the point cloud, the point data contains x, y, z coordinates
     int data = getRawData();
-    // Amount of cols would be the amounts of points right? Amount of sets of x, y z, so the total divided by 3
+    // Amount of cols are be the amounts of points. i.e.: Amount of sets of x, y z, so the total divided by 3
     int cols = 10;     
     Eigen::Matrix3Xf mat(3,cols);
 

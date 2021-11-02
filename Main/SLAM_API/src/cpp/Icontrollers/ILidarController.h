@@ -5,12 +5,14 @@
 #ifndef _lidarcontroller_h
 #define _lidarcontroller_h
 
-class LidarController {
-    private:
-        LidarService lidar_service;
-    public:
-        LidarController();
-        Eigen::Matrix3Xf requestData();
-};
+namespace controllers{
+    class LidarController {
+        private:
+            services::LidarService lidar_service;
+        public:
+            LidarController();
+            Eigen::Matrix3Xf requestData();
+    };
+}
 
 #endif

@@ -3,16 +3,17 @@
 #include "../Icontrollers/IGPSController.h"
 #include "../Iservices/IGPSService.h"
 
-using namespace std;
+using namespace controllers;
 
 GPSController::GPSController(){
 
 }
 
 // Instead of bool, the return value must be something SLAM can work with
-// Todo:
-// - change output
-// - Add some kind of exception handling
+/* TODO:
+    - change output
+    - Add some kind of exception handling
+ */
 int GPSController::requestData(){
     int data = gps_service.requestData();
     return data;

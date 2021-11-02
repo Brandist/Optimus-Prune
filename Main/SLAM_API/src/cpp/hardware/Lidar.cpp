@@ -4,17 +4,19 @@
 #include <pcl/point_types.h>
 #include "../Ihardware/Lidar.h"
 
-using namespace std;
+using namespace hardware;
 
 Lidar::Lidar(){
 
 }
 
-// TODO: 
-// - change data type to raw lidar data type
-// - remove set method
-// - replace dummy data with actual point cloud data 
-// - Compile with cmake in order to compile the PCL, see the tutorial
+/* TODO: 
+    - change data type to raw lidar data type
+    - remove set method
+    - replace dummy data with actual point cloud data 
+    - Compile with cmake in order to compile the PCL, see the tutorial
+    - Think about how I can receive the data from the Lidar (ROS?)
+*/
 int Lidar::readRawData(){
     // request the other API for reading data, send the raw data back to service
     // pcl::PointCloud<pcl::PointXYZ>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZ>);
@@ -28,12 +30,10 @@ int Lidar::readRawData(){
     return data;
 }
 
-// raw data
 void Lidar::setData(int data){
     this->data = data;
 }
 
-// raw data
 int Lidar::getData(){
     return this->data;
 }

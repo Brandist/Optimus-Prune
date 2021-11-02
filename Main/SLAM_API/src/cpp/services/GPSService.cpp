@@ -6,21 +6,32 @@
 #include "../Iservices/IGPSService.h"
 #include "../Ihardware/GPS.h"
 
-using namespace std;
+using namespace services;
 
 GPSService::GPSService() {
     
 }
 
-// Not sure yet what type of data this will be, GPS data for SLAM must likely will be a 3d Vector, ask Brandon
-int GPSService::convertRawDataToVectors(int raw_data){
+/*  The conversion from raw data to SLAM-readable data
+    input: Dont know yet
+    output: 3d Vector */
+int GPSService::convertRawDataToPosVector(){
+    int data = getRawData();
+    // Do the actual conversion here
     return raw_data;
 }
 
 int GPSService::requestData(){
     // Call the hardware layer to get the raw data
-    // Do something with raw data to make it something where we can work with
     int data = gps.readRawData();
-    int gps_data = convertRawDataToVectors(data);
+    int gps_data = convertRawDataToPosVector();
     return gps_data;
+}
+
+void GPSService::setRawData(int raw_data){
+    this->raw_data = raw_data;
+}
+
+int GPSService::getRawData(){
+    return this->raw_data;
 }

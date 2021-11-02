@@ -3,14 +3,16 @@
 #ifndef _gps_h
 #define _gps_h
 
-class GPS {
-    private:
-        int data;
-    public:
-        GPS();
-        int readRawData();
-        void setData(int data);
-        int getData();
-};
+namespace hardware{
+    class GPS {
+        private:
+            int data;
+            void setData(int data);
+        public:
+            GPS();
+            int readRawData();
+            int getData();
+    };
+}
 
 #endif

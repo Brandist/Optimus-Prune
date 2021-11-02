@@ -4,12 +4,14 @@
 #ifndef _gyrocontroller_h
 #define _gyrocontroller_h
 
-class GyroController {
-    private:
-        GyroService gyro_service;
-    public:
-        GyroController();
-        int requestData();
-};
+namespace controllers{
+    class GyroController {
+        private:
+            services::GyroService gyro_service;
+        public:
+            GyroController();
+            int requestData();
+    };
+}
 
 #endif

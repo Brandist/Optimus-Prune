@@ -5,16 +5,18 @@
 #ifndef _lidarservice_h
 #define _lidarservice_h
 
-class LidarService {
-    private:
-        Lidar lidar;
-        int raw_data;
-    public:
-        LidarService();
-        Eigen::Matrix3Xf convertRawDataToMatrix();
-        Eigen::Matrix3Xf requestData();
-        void setRawData(int raw_data);
-        int getRawData();
-};
+namespace services{
+    class LidarService {
+        private:
+            hardware::Lidar lidar;
+            int raw_data;
+            Eigen::Matrix3Xf convertRawDataToMatrix();
+            void setRawData(int raw_data);
+        public:
+            LidarService();
+            Eigen::Matrix3Xf requestData();
+            int getRawData();
+    };
+}
 
 #endif
