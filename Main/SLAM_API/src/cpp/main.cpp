@@ -17,5 +17,4 @@ int main() {
     // Maybe send the incoming gps, gyro and lidar data to SLAM via ROS bus
     // then SLAM can read the data, so we dont need to make an instance of SLAM
     // Or make an instance of SLAM and throw the controllers in the constructor so SLAM can directly communicate with the controllers
-    dummy_slam.start();
 }
