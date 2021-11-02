@@ -1,17 +1,20 @@
 #include <iostream>
 #include <string>
+#include <Eigen/Core>
 #include "../Icontrollers/ILidarController.h"
 #include "../Iservices/ILidarService.h"
 
-using namespace std;
+using namespace controllers;
 
 LidarController::LidarController() {
 
 }
 
-// Instead of bool, the return value must be something SLAM can work with
-int LidarController::requestData(){
-    int validation = lidar_service.requestData();
-    // Do something here with validation, what to do when something goes wrong
-    return validation;
+/* Output: Matrix or list of vectors, something that SLAM can work with
+    TODO:
+    - Add some kind of exception handling
+ */
+Eigen::Matrix3Xf LidarController::requestData(){
+    Eigen::Matrix3Xf data = lidar_service.requestData();
+    return data;
 }

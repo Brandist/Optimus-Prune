@@ -5,12 +5,18 @@
 #ifndef _gpsservice_h
 #define _gpsservice_h
 
-class GPSService {
-    private:
-        GPS gps;
-    public:
-        GPSService();
-        bool requestData();
-};
+namespace services{
+    class GPSService {
+        private:
+            hardware::GPS gps;
+            int raw_data;
+            int convertRawDataToPosVector();
+            void setRawData(int raw_data);
+        public:
+            GPSService();
+            int requestData();
+            int getRawData();
+    };
+}
 
 #endif

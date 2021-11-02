@@ -5,12 +5,18 @@
 #ifndef _gyroservice_h
 #define _gyroservice_h
 
-class GyroService {
-    private:    
-        Gyro gyro;
-    public:
-        GyroService();
-        bool requestData();
-};
+namespace services{
+    class GyroService {
+        private:    
+            hardware::Gyro gyro;
+            int raw_data;
+            int convertRawDatatoSomeData();
+            void setRawData(int raw_data);
+        public:
+            GyroService();
+            int requestData();
+            int getRawData();
+    };
+}
 
 #endif

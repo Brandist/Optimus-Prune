@@ -3,14 +3,16 @@
 #ifndef _lidar_h
 #define _lidar_h
 
-class Lidar {
-    private:
-        int data;
-    public:
-        Lidar();
-        int readRawData();
-        void setData(int data);
-        int getData();
-};
+namespace hardware{
+    class Lidar {
+        private:
+            int data;
+            void setData(int data);
+        public:
+            Lidar();
+            int readRawData();
+            int getData();
+    };
+}
 
 #endif

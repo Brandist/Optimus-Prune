@@ -4,12 +4,14 @@
 #ifndef _gpscontroller_h
 #define _gpscontroller_h
 
-class GPSController {
-    private:
-        GPSService gps_service;
-    public:
-        GPSController();
-        bool requestData();
-};
+namespace controllers{
+    class GPSController {
+        private:
+            services::GPSService gps_service;
+        public:
+            GPSController();
+            int requestData();
+    };
+}
 
 #endif

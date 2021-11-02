@@ -1,31 +1,39 @@
-// These classes represent the hardware components and receiving their data.
-// So readRawData() returns raw LiDaR data, the service normalises it and the controller checks for errors
-// the SLAM folder can then call these from the controller in order to do math shit with the data
-
 #include <iostream>
 #include <string>
+#include <pcl/io/pcd_io.h>
+#include <pcl/point_types.h>
 #include "../Ihardware/Lidar.h"
 
-using namespace std;
+using namespace hardware;
 
 Lidar::Lidar(){
 
 }
 
+/* TODO: 
+    - change data type to raw lidar data type
+    - remove set method
+    - replace dummy data with actual point cloud data 
+    - Compile with cmake in order to compile the PCL, see the tutorial
+    - Think about how I can receive the data from the Lidar (ROS?)
+*/
 int Lidar::readRawData(){
     // request the other API for reading data, send the raw data back to service
+    // pcl::PointCloud<pcl::PointXYZ>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZ>);
+    
+    // if (pcl::io::loadPCDFile<pcl::PointXYZ>("test_pcd.pcd", *cloud) == -1) {
+    //     return -1;
+    // }
+    
     setData(10);
     int data = getData();
     return data;
 }
 
-// This should be the raw data from the GPS
-// Setting the raw data should not be necessary
 void Lidar::setData(int data){
     this->data = data;
 }
 
-// This should be the raw data from the GPS
 int Lidar::getData(){
     return this->data;
 }
