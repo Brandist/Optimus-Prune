@@ -8,10 +8,10 @@
 using namespace std;
 
 int main() {
-    GPSController gps_cont;
-    GyroController gyro_cont;
-    LidarController lidar_cont;
-    Slam dummy_slam(gps_cont, gyro_cont, lidar_cont);
+    controllers::GPSController gps_cont;
+    controllers::GyroController gyro_cont;
+    controllers::LidarController lidar_cont;
+    SLAM::Slam dummy_slam(gps_cont, gyro_cont, lidar_cont);
 
     // Is there ROS communication here?
     // Maybe send the incoming gps, gyro and lidar data to SLAM via ROS bus
