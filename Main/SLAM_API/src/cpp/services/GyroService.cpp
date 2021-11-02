@@ -25,7 +25,7 @@ int GyroService::requestData(){
     // Call the hardware layer to get the raw data
     // Do something with raw data to make it something where we can work with
     int data = gyro.readRawData();
-    int data = convertRawDatatoSomeData();
+    int gyro_data = convertRawDatatoSomeData();
     return false;
 }
 
