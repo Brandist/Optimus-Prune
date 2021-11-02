@@ -11,3 +11,12 @@
 
 ## RGB Camera (optional)
 - https://www.edmundoptics.com/p/allied-vision-alvium-1800-u-507m-23-51mp-c-mount-right-angle-usb-31-monochrome-camera/42995/
+
+## API Necessities:
+**Source:** https://www.acodersjourney.com/top-25-cplusplus-api-design-mistakes-and-how-to-avoid-them/
+
+- Point 14
+- Point 12
+- Point 11
+- Point 9
+- Point 16
