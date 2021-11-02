@@ -20,3 +20,6 @@
 - Point 11
 - Point 9
 - Point 16
+
+## API (REST) basic structure and layering
+- https://www.coreycleary.me/project-structure-for-an-express-rest-api-when-there-is-no-standard-way
