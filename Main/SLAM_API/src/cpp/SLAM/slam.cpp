@@ -2,9 +2,9 @@
 #include <string>
 #include <Eigen/Core>
 #include "slam.h"
-#include "../Icontrollers/IGPSController.h"
-#include "../Icontrollers/IGyroController.h"
-#include "../Icontrollers/ILidarController.h"
+#include "../controllers/Icontrollers/IGPSController.h"
+#include "../controllers/Icontrollers/IGyroController.h"
+#include "../controllers/Icontrollers/ILidarController.h"
 
 using namespace SLAM;
 

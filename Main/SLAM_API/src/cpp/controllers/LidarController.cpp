@@ -1,8 +1,8 @@
 #include <iostream>
 #include <string>
 #include <Eigen/Core>
-#include "../Icontrollers/ILidarController.h"
-#include "../Iservices/ILidarService.h"
+#include "Icontrollers/ILidarController.h"
+#include "../services/Iservices/ILidarService.h"
 
 using namespace controllers;
 

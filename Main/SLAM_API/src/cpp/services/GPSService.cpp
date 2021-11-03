@@ -3,8 +3,8 @@
 
 #include <iostream>
 #include <string>
-#include "../Iservices/IGPSService.h"
-#include "../Ihardware/GPS.h"
+#include "Iservices/IGPSService.h"
+#include "../hardware/Ihardware/GPS.h"
 
 using namespace services;
 

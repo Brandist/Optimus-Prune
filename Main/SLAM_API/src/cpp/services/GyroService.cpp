@@ -3,8 +3,8 @@
 
 #include <iostream>
 #include <string>
-#include "../Iservices/IGyroService.h"
-#include "../Ihardware/Gyro.h"
+#include "Iservices/IGyroService.h"
+#include "../hardware/Ihardware/Gyro.h"
 
 using namespace services;
 

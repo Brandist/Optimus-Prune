@@ -15,7 +15,6 @@ SLAMOBJS := $(patsubst %.o, $(SLAM_DIR)/%.o, slam.o)
 
 all: compile
 	./$(TARGET)
-	make clean
 
 compile: 
 	$(CC) $(TARGET).cpp

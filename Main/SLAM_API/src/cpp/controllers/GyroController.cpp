@@ -1,8 +1,7 @@
 #include <iostream>
 #include <string>
-#include "../Icontrollers/IGyroController.h"
-#include "../Iservices/IGyroService.h"
-
+#include "Icontrollers/IGyroController.h"
+#include "../services/Iservices/IGyroService.h"
 using namespace controllers;
 
 GyroController::GyroController() {

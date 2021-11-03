@@ -3,8 +3,8 @@
 #include <iostream>
 #include <string>
 #include <Eigen/Core>
-#include "../Iservices/ILidarService.h"
-#include "../Ihardware/Lidar.h"
+#include "Iservices/ILidarService.h"
+#include "../hardware/Ihardware/Lidar.h"
 
 using namespace services;
 
