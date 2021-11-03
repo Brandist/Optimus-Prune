@@ -3,8 +3,8 @@
 #include <iostream>
 #include <string>
 #include <Eigen/Core>
-#include "../Iservices/ILidarService.h"
-#include "../Ihardware/Lidar.h"
+#include "Iservices/ILidarService.h"
+#include "../hardware/Ihardware/Lidar.h"
 
 using namespace services;
 
@@ -12,6 +12,8 @@ LidarService::LidarService() {
 
 }
 
+// TODO: 
+// - remove conversion method
 /* The conversion from raw data to SLAM-readable data
  Input: raw Lidar data, from the PCL
  Output: Matrix or list of vectors containing the x y z coordinates */

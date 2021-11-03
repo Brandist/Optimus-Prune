@@ -1,6 +1,6 @@
 // This is just the interface of the corresponding service class
 #include <Eigen/Core>
-#include "../Ihardware/Lidar.h"
+#include "../../hardware/Ihardware/Lidar.h"
 
 #ifndef _lidarservice_h
 #define _lidarservice_h

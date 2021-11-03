@@ -1,6 +1,6 @@
 #include <iostream>
 #include <string>
-#include "../Ihardware/GPS.h"
+#include "Ihardware/GPS.h"
 
 using namespace hardware;
 

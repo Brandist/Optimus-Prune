@@ -1,19 +1,19 @@
 // This is just the interface of the corresponding service class
 
-#include "../Ihardware/Gyro.h"
+#include "../../hardware/Ihardware/GPS.h"
 
-#ifndef _gyroservice_h
-#define _gyroservice_h
+#ifndef _gpsservice_h
+#define _gpsservice_h
 
 namespace services{
-    class GyroService {
-        private:    
-            hardware::Gyro gyro;
+    class GPSService {
+        private:
+            hardware::GPS gps;
             int raw_data;
-            int convertRawDatatoSomeData();
+            int convertRawDataToPosVector();
             void setRawData(int raw_data);
         public:
-            GyroService();
+            GPSService();
             int requestData();
             int getRawData();
     };

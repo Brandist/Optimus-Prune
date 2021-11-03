@@ -1,8 +1,8 @@
 // SLAM interface
 #include <Eigen/Core>
-#include "../Icontrollers/IGPSController.h"
-#include "../Icontrollers/IGyroController.h"
-#include "../Icontrollers/ILidarController.h"
+#include "../controllers/Icontrollers/IGPSController.h"
+#include "../controllers/Icontrollers/IGyroController.h"
+#include "../controllers/Icontrollers/ILidarController.h"
 
 #ifndef _slam_h
 #define _slam_h

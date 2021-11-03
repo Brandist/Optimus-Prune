@@ -1,6 +1,6 @@
 #include <iostream>
 #include <string>
-#include "../Ihardware/Gyro.h"
+#include "Ihardware/Gyro.h"
 
 using namespace hardware;
 

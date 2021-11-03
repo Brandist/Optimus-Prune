@@ -2,7 +2,7 @@
 #include <string>
 #include <pcl/io/pcd_io.h>
 #include <pcl/point_types.h>
-#include "../Ihardware/Lidar.h"
+#include "Ihardware/Lidar.h"
 
 using namespace hardware;
 

@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
-#include "../Icontrollers/IGPSController.h"
-#include "../Iservices/IGPSService.h"
+#include "Icontrollers/IGPSController.h"
+#include "../services/Iservices/IGPSService.h"
 
 using namespace controllers;
 

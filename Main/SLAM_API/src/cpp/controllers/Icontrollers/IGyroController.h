@@ -1,5 +1,5 @@
 // This is just the interface of the corresponding controller class
-#include "../Iservices/IGyroService.h"
+#include "../../services/Iservices/IGyroService.h"
 
 #ifndef _gyrocontroller_h
 #define _gyrocontroller_h
