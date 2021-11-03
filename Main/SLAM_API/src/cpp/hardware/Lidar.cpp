@@ -19,12 +19,7 @@ Lidar::Lidar(){
 */
 int Lidar::readRawData(){
     // request the other API for reading data, send the raw data back to service
-    // pcl::PointCloud<pcl::PointXYZ>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZ>);
-    
-    // if (pcl::io::loadPCDFile<pcl::PointXYZ>("test_pcd.pcd", *cloud) == -1) {
-    //     return -1;
-    // }
-    
+    // The PCL code should be either in the service or in the Lidar API. 
     setData(10);
     int data = getData();
     return data;

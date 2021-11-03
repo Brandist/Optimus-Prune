@@ -3,6 +3,8 @@
 #include <iostream>
 #include <string>
 #include <Eigen/Core>
+#include <pcl/io/pcd_io.h>
+#include <pcl/point_types.h>
 #include "Iservices/ILidarService.h"
 #include "../hardware/Ihardware/Lidar.h"
 
@@ -20,10 +22,18 @@ LidarService::LidarService() {
 Eigen::Matrix3Xf LidarService::convertRawDataToMatrix(){
     // raw_data contains all the points in the point cloud, the point data contains x, y, z coordinates
     int data = getRawData();
+    pcl::PointCloud<pcl::PointXYZ>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZ>);
+
     // Amount of cols are be the amounts of points. i.e.: Amount of sets of x, y z, so the total divided by 3
+    // int cols = cloud->size();
     int cols = 10;     
     Eigen::Matrix3Xf mat(3,cols);
-
+    // int i=0;
+    // for (const auto &point: *cloud){
+    //     Eigen::Vector3f vec(point.x, point.y, point.z);
+    //     mat.col(i) = vec;
+    //     i++;
+    // }
     for (int i=0; i<mat.cols(); i++){
         float x = 10.0;
         float y = 4.0;
