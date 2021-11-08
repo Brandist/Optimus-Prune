@@ -18,18 +18,27 @@ Map::Map(Eigen::Matrix3Xf lidar_data, int gps_data){
     setGPSData(gps_data);
 }
 
-/* Initalise map and put the points in the map (not sure if a map object is needed)
-    (or some other object can be used, like a set of vectors) */
+/* get the lidar data as a Matrix object,
+    convert the Matrix object to a Node (custom struct)
+    Make a list of nodes. Nodes contain a label giving the Nodes a label
+    which is nice for pathfinding and mapping since we can see what a node is.
+    And because of the lidar data, we can see if a set of coordinates is far away (indicating a wall or tree) */
 void Map::init(){
     Eigen::Matrix3Xf mat = getLidarData();
     std::cout << mat << std::endl;
-    std::list<Eigen::Vector2f> list_of_vectors;
+    Node nodes[mat.cols()];
     
     for (int i=0; i<mat.cols(); i++){
-        float x = mat.col(i).x();
-        float y = mat.col(i).y();
-        Eigen::Vector2f vec(x, y);
-        list_of_vectors.push_back(vec);
+        Node node;
+        node.x = mat.col(i).x();
+        node.y = mat.col(i).y();
+        node.parent_x = 0.0;
+        node.parent_y = 0.0;
+        node.g_cost = 0.0;
+        node.h_cost = 0.0;
+        node.f_cost = 0.0;
+        node.label = path_node;
+        nodes[i] = node;
     }
 }
 

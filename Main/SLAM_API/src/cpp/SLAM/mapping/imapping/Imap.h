@@ -6,8 +6,29 @@
 #ifndef _map_h
 #define _map_h
 
+/* Struct info: 
+    is parent_x & y needed? */
 namespace map {
     class Map {
+        enum NodeType{
+            path_node,
+            wall,
+            robot_node,
+            start,
+            end,
+            tree
+        };
+        struct Node {
+            float x;
+            float y;
+            float parent_x;
+            float parent_y;
+            float g_cost;
+            float h_cost;
+            float f_cost;
+            NodeType label;
+        };
+        
         private:
             std::map<float, float> slam_map;
             int gps_data;
