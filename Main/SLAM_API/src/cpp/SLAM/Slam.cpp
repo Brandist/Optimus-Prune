@@ -7,6 +7,20 @@
 #include "../controllers/Icontrollers/IGyroController.h"
 #include "../controllers/Icontrollers/ILidarController.h"
 
+/* This is the main SLAM file. Consider this as the main loop
+    initalise SLAM with the controllers for the different components
+    then the SLAM process can start
+    The start process is still work in progress
+    the map initalisation containing the lidar, gps and IMU data
+        - the map will be an object that is used for pathfinding
+        - the map contains points (vectors) containing the lidar data
+            - each type of vector has a label indicating if its a wall, possible path, begin and end point
+        - TODO: - Create the map, either via an map object, or set of vector, something that is easy to visualise
+                - Implement the SLAM math functions (odometry, landmarks) output and make it visual in the map 
+    The slam process should include (apart from map building) the following:
+        - Odometry
+        - Landmark extraction from the lidar data
+        - the output should be included in the map building as well */
 using namespace SLAM;
 
 Slam::Slam(){
@@ -26,11 +40,15 @@ bool Slam::start(){
     setGyroData(gyro_cont.requestData());
     setLidarData(lidar_cont.requestData());
 
-    map::Map(getLidarData(), getGPSData());
+    map::Map slam_map(getLidarData(), getGPSData());
 
-    // bool gps_result = doSomethingWithGPSData();
-    // bool lidar_result = doSomethingWithLidarData();
-    // bool gyro_result = doSomethingWithGyroData();
+    slam_map.init();
+
+    // Work in progress
+    // get the odometry data, landmark extraction etc
+    // update the map accordingly
+    // call the pathfinding algorithm
+
     return false;
 }
 
@@ -38,12 +56,9 @@ bool Slam::start(){
      - is it needed to make classes (entities) of the components containing the incoming data and calculations, or do we do that in the map class?
      - GPS   
      - Gyro
-     - Lidar
-     - Maybe one for pure math functions
-     - Visualisation?
-     - Map Making
-     - Also a separate instance of the pathfinding, since our structure tells us that pathfinding requests the SLAM map
-*/     
+     - Lidar */     
+
+// So far: A reasoning for these methods are not yet found
 bool Slam::doSomethingWithGPSData(){
     int data = getGPSData();
     std::cout << data << std::endl;

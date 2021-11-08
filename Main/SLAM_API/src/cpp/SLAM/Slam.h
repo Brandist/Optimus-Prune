@@ -8,9 +8,7 @@
 #define _slam_h
 
 /* TODO:
-    - change data types of gps and gyro
-    - think about whats private and public, maybe even protected
-*/
+    - change data types of gps and gyro */
 namespace SLAM{
     class Slam {
         private:
