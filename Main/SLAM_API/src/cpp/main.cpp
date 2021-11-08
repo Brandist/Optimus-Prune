@@ -3,7 +3,7 @@
 #include "controllers/Icontrollers/IGPSController.h"
 #include "controllers/Icontrollers/IGyroController.h"
 #include "controllers/Icontrollers/ILidarController.h"
-#include "SLAM/slam.h"
+#include "SLAM/Slam.h"
 
 using namespace std;
 
