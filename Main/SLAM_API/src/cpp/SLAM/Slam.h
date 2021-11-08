@@ -25,9 +25,6 @@ namespace SLAM{
         public:
             Slam();
             Slam(controllers::GPSController gps_cont, controllers::GyroController gyro_cont, controllers::LidarController lidar_cont);
-            bool doSomethingWithGPSData();
-            bool doSomethingWithLidarData();
-            bool doSomethingWithGyroData();
             int getGPSData();
             int getGyroData();
             Eigen::Matrix3Xf getLidarData();

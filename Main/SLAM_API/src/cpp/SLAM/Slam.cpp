@@ -41,43 +41,28 @@ bool Slam::start(){
     setLidarData(lidar_cont.requestData());
 
     map::Map slam_map(getLidarData(), getGPSData());
-
+    // constructor of a_star
     slam_map.init();
 
     // Work in progress
-    // get the odometry data, landmark extraction etc
+    // get and process the odometry data, landmark extraction etc
+    //  - odometry and landmark extraction should be called EKF
+    //  - unknown if EKF should have direct communication with the map
+    // get the GPS, Gyro, IMU data 
+    //  - process the data
     // update the map accordingly
     // call the pathfinding algorithm
 
+    // a_star init which will request the set of Nodes (containing all the nodes)
+    // a_start calculateOptimalPath will take in the robot_pos and end_nodes 
+
     return false;
 }
 
-/* TODO:
-     - is it needed to make classes (entities) of the components containing the incoming data and calculations, or do we do that in the map class?
-     - GPS   
-     - Gyro
-     - Lidar */     
 
-// So far: A reasoning for these methods are not yet found
-bool Slam::doSomethingWithGPSData(){
-    int data = getGPSData();
-    std::cout << data << std::endl;
-    return false;
-}
-
-bool Slam::doSomethingWithGyroData(){
-    int data = getGyroData();
-    std::cout << data << std::endl;
-    return false;
-}
-
-bool Slam::doSomethingWithLidarData(){
-    Eigen::Matrix3Xf data = getLidarData();
-    std::cout << data << std::endl;
-    return false;
-}
-
-// Setting the data should not be necessary
+// ---------------------------------------------------------------------------------
+// ------------------------------ GETTERS AND SETTERS ------------------------------
+// ---------------------------------------------------------------------------------
 void Slam::setGPSData(int gps_data){
     this->gps_data = gps_data;
 }
@@ -86,7 +71,6 @@ int Slam::getGPSData(){
     return this->gps_data;
 }
 
-// Setting the data should not be necessary
 void Slam::setGyroData(int gyro_data){
     this->gyro_data = gyro_data;
 }
@@ -95,7 +79,6 @@ int Slam::getGyroData(){
     return this->gps_data;
 }
 
-// Setting the data should not be necessary
 void Slam::setLidarData(Eigen::Matrix3Xf lidar_data){
     this->lidar_data = lidar_data;
 }
