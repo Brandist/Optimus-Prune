@@ -35,9 +35,9 @@ Eigen::Matrix3Xf LidarService::convertRawDataToMatrix(){
     //     i++;
     // }
     for (int i=0; i<mat.cols(); i++){
-        float x = 10.0;
-        float y = 4.0;
-        float z = 6.0;
+        float x = i;
+        float y = i + 2;
+        float z = 1.0;
         Eigen::Vector3f vec(x, y, z);
         mat.col(i) = vec;
     }   
