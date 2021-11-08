@@ -1,4 +1,7 @@
-#include "Sensor.hpp"
+#include "Headers/Sensor.hpp"
+
+static uint32_t rise_tick = 0;    // Pulse rise time tick value
+static uint32_t pulse_width = 0;  // Last measured pulse width (us)
 
 
 /* Function: triggers the sensor and reads the data
@@ -9,10 +12,11 @@
 float Sensor::ReadSensor()
 {
     bool wasTriggered = Trigger();
-    if (wasTriggered)
-    {
-        //start reading the pulse
-    }
+    // if (wasTriggered)
+    // {
+    //     //start reading the pulse
+    //     gpioSetAlertFunc(this->listenPin,ReadPulse);
+    // }
 
     return -1;    
 }
@@ -33,7 +37,8 @@ bool Sensor::Trigger()
  * 
  * Output: nothing
  */
-void Sensor::ReadPulse(int pi, unsigned user_gpio, unsigned level, uint32_t tick) {
+void ReadPulse(int gpio, int level, uint32_t tick) {
+    printf("GPIO %d became %d at %d", gpio, level, tick);
     if (level == 1) {  // rising edge
         rise_tick = tick;
     }
@@ -42,17 +47,22 @@ void Sensor::ReadPulse(int pi, unsigned user_gpio, unsigned level, uint32_t tick
     }
 }
 
+std::string Sensor::UnitTest(){
 
-Sensor::Ultrasonic(int listenPin, int triggerPin)
+    if (gpioInitialise() < 0)
+    {
+        return "Failed";
+    }
+    ReadSensor();
+}
+
+Sensor::Sensor(int listenPin, int triggerPin)
 {
+    //this->rise_tick = 0;
+    //this->pulse_width = 0;
     //initialize the raspberry pi GPIO
     // needs to go in the main of the main
-    int init = gpio_start();
-    if (init < 0)
-    {
-        fprintf(stderr, "pigpio initialization failed (%d)\n", pi);
-        return init;
-    }
+    
 
     //set the pins to input and output
     this->listenPin=listenPin;
