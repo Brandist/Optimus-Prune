@@ -5,7 +5,9 @@ CONT_DIR := controllers
 SERV_DIR := services
 HARD_DIR := hardware
 SLAM_DIR := SLAM
-MAP_DIR := $(SLAM_DIR)/mapping
+MAP_DIR  := $(SLAM_DIR)/mapping
+EKF_DIR  := $(SLAM_DIR)/EKF
+
 TARGET := main
 
 SRCS := $(wildcard *.cpp)
@@ -14,6 +16,7 @@ SOBJS := $(patsubst %.o, $(SERV_DIR)/%.o, GPSService.o GyroService.o LidarServic
 HOBJS := $(patsubst %.o, $(HARD_DIR)/%.o, GPS.o Gyro.o Lidar.o)
 SLAMOBJS := $(patsubst %.o, $(SLAM_DIR)/%.o, Slam.o)
 MAPOBJS := $(patsubst %.o, $(MAP_DIR)/%.o, Map.o)
+EKFOBJS := $(patsubst %.o, $(EKF_DIR)/%.o, Ekf.o)
 
 all: compile
 	./$(TARGET)
@@ -25,7 +28,8 @@ compile:
 	$(MAKE) -C $(HARD_DIR)
 	$(MAKE) -C $(SLAM_DIR)
 	$(MAKE) -C $(MAP_DIR)
-	$(CCO) $(TARGET) $(TARGET).o $(COBJS) $(SOBJS) $(HOBJS) $(SLAMOBJS) $(MAPOBJS)
+	$(MAKE) -C $(EKF_DIR)
+	$(CCO) $(TARGET) $(TARGET).o $(COBJS) $(SOBJS) $(HOBJS) $(SLAMOBJS) $(MAPOBJS) $(EKFOBJS)
 
 clean:
 	find . -type f -name '*.o' -delete
