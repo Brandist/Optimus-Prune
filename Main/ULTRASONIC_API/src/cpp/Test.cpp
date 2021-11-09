@@ -3,7 +3,7 @@
 #include<unistd.h>
 int main(void){
 
-    Sensor testSensor = Sensor(3,5);
+    Sensor testSensor = Sensor(5,3);
     for (size_t i = 0; i < 10; i++)
     {
         //scan one sensor

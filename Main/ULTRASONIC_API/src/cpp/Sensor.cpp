@@ -2,7 +2,7 @@
 
 static uint32_t rise_tick = 0;    // Pulse rise time tick value
 static uint32_t pulse_width = 0;  // Last measured pulse width (us)
-
+static bool notWaiting = true;
 
 /* Function: triggers the sensor and reads the data
  * 
@@ -11,14 +11,18 @@ static uint32_t pulse_width = 0;  // Last measured pulse width (us)
 */
 float Sensor::ReadSensor()
 {
-    /*bool wasTriggered = */Trigger();
-    // if (wasTriggered)
-    // {
-    //     //start reading the pulse
-    //     gpioSetAlertFunc(this->listenPin,ReadPulse);
-    // }
+    bool wasTriggered = Trigger();
+    if (wasTriggered)
+    {
+        //start reading the pulse
+    while (!notWaiting)
+    {
+    }
+    
+    }
 
-    return -1;    
+
+    return pulse_width;    
 }
 
 
@@ -59,6 +63,7 @@ std::string Sensor::UnitTest(){
 
 Sensor::Sensor(int listenPin, int triggerPin)
 {
+    gpioInitialise();
     //this->rise_tick = 0;
     //this->pulse_width = 0;
     //initialize the raspberry pi GPIO
@@ -70,7 +75,7 @@ Sensor::Sensor(int listenPin, int triggerPin)
     this->triggerPin=triggerPin;
     gpioSetMode(listenPin, PI_INPUT);
     gpioSetMode(triggerPin, PI_OUTPUT);
-    
+    gpioSetAlertFunc(this->listenPin,ReadPulse);
     //INP_GPIO(listenPin);
     //INP_GPIO(triggerPin);
     //OUT_GPIO(triggerPin);

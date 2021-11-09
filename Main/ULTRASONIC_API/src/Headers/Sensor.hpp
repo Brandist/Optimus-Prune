@@ -18,7 +18,7 @@ private:
 
     
 public:
-    Sensor(int,int);
+    Sensor(int listenPin,int triggerPing);
     ~Sensor();
     float ReadSensor();
     std::string UnitTest();
