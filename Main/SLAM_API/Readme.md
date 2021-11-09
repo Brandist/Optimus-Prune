@@ -22,7 +22,7 @@ Direct communication between SLAM and these controllers is still something we're
 
 ### Localisation 
 
-For localisation, normally SLAM uses the LiDaR on order to extract landmarks for localisation, but since a GPS-RTK is available, we can modify the SLAM to use the GPS for localisation. Ofcourse GPS isnt enough, so landmark extraction and odometry is still necessary for making corrections. Since GPS data is the priority, this repository currently doesnt focus on the landmarks and odometry as of 28-10-2021
+For localisation, normally SLAM uses the LiDaR on order to extract landmarks for localisation, but since a GPS-RTK is available, we can modify the SLAM to use the GPS for localisation. Ofcourse GPS isnt enough, so landmark extraction and odometry is still necessary for making corrections. Since GPS data is the priority, this repository currently doesnt focus on the landmarks as of 28-10-2021. It does focus on Odometry as of 09-11-2021. Landmarks is being tested
 
 **Parts**
 
@@ -36,7 +36,7 @@ For localisation, normally SLAM uses the LiDaR on order to extract landmarks for
 - Lidar
 - GPS
 - landmarks
-- coordinates of plants (sick)
+- coordinates of plants (sick) (?)
 - libs for making a map, visualised of just a set of coordinates
 
 ### Navigation
