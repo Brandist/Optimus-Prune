@@ -1,19 +1,11 @@
 // Reading the data from the Lidar and GPS (IMU) and putting the coordinates a map
-// This still need to be worked out
-
-#include <iostream>
-#include <map>
-#include <list>
-#include <Eigen/Core>
 #include "imapping/Imap.h"
 
 using namespace map;
 
-Map::Map(){
+Map::Map(){}
 
-}
-
-Map::Map(Eigen::Matrix3Xf lidar_data, int gps_data){
+Map::Map(Eigen::Matrix3Xf lidar_data, Eigen::Vector3f gps_data){
     setLidarData(lidar_data);
     setGPSData(gps_data);
 }
@@ -25,38 +17,84 @@ Map::Map(Eigen::Matrix3Xf lidar_data, int gps_data){
     And because of the lidar data, we can see if a set of coordinates is far away (indicating a wall or tree) */
 void Map::init(){
     Eigen::Matrix3Xf mat = getLidarData();
-    std::cout << mat << std::endl;
-    Node nodes[mat.cols()];
-    
-    for (int i=0; i<mat.cols(); i++){
+    Node* nodes = matToNodes();
+    // std::cout << "s: " << nodes[0].label << std::endl;
+
+    setRobotPositionVector(getGPSData());
+    setStartVector(getRobotPositionVector());
+    setEndVector(mat.col(mat.cols() - 1));
+
+    setAllNodes(nodes);
+    setRobotNode(initRobotPositionNode());
+    setStartNode(initStartPositionNode());
+    setEndNode(initEndPositionNode());
+
+    delete[] nodes;
+}
+
+Node* Map::matToNodes(){
+    Eigen::Matrix3Xf mat = getLidarData();
+    setNodesSize(mat.cols());
+    int nodes_size = getNodesSize();
+    Node* nodes = new Node[nodes_size];
+
+    for (int i=0; i<nodes_size; ++i){
         Node node;
         node.x = mat.col(i).x();
         node.y = mat.col(i).y();
+        node.z = mat.col(i).z();
         node.parent_x = 0.0;
         node.parent_y = 0.0;
         node.g_cost = 0.0;
         node.h_cost = 0.0;
         node.f_cost = 0.0;
-        node.label = path_node;
+        node.label = path;
         nodes[i] = node;
     }
+
+    return nodes;
 }
 
-void Map::initBoundaryNodes(){
-    Eigen::Matrix3Xf data = getLidarData();
-    /* Given the coordinates of the trees and the requirements, 
-     we can calculate the boundary coordinates that the robot cannot drive through
-     Give those nodes (coordinates) a high weight value so that the robot knows it will not
-     take node into the pathfinding */
-    setBoundaryNodes(data);
+Node Map::initRobotPositionNode(){
+        Node node;
+        node.x = getRobotPositionVector().x();
+        node.y = getRobotPositionVector().y();
+        node.z = getRobotPositionVector().z();
+        node.parent_x = 0.0;
+        node.parent_y = 0.0;
+        node.g_cost = 0.0;
+        node.h_cost = 0.0;
+        node.f_cost = 0.0;
+        node.label = robot;
+        return node;
 }
 
-void Map::initNodes(){
-    Eigen::Matrix3Xf data = getLidarData();
-    /* From the lidar data, check what kind of nodes the robot is allowed to walk on
-     This list contains all the nodes the robot is allowed to walk on
-     These are all the nodes between the boundary nodes, start and end nodes in the row */
-    setPossiblePathNodes(data);
+Node Map::initStartPositionNode(){
+        Node node;
+        node.x = getStartVector().x();
+        node.y = getStartVector().y();
+        node.z = getStartVector().z();
+        node.parent_x = 0.0;
+        node.parent_y = 0.0;
+        node.g_cost = 0.0;
+        node.h_cost = 0.0;
+        node.f_cost = 0.0;
+        node.label = start;
+        return node;
+}
+
+Node Map::initEndPositionNode(){
+        Node node;
+        node.x = getEndVector().x();
+        node.y = getEndVector().y();
+        node.z = getEndVector().z();
+        node.parent_x = 0.0;
+        node.parent_y = 0.0;
+        node.g_cost = 0.0;
+        node.h_cost = 0.0;
+        node.f_cost = 0.0;
+        node.label = end;
+        return node;
 }
 
 /* Plan so far: put the robots current position on a 2d map pure for pathfinding 
@@ -71,71 +109,73 @@ void Map::fillMapWithPointCloud(){
 
 }
 
-/* Print some useful data, not sure what now */
-void Map::printMap(){
-    std::cout << "start node: " << getStartNode() << ", end node: " << getEndNode() << std::endl;
-    std::cout << "robots pos: " << getRobotPosition() << std::endl;
-    std::cout << "lidar data: " << getLidarData() << std::endl;
-    std::cout << "gps data: " << getGPSData() << std::endl;
-    // some print map thing here
+/* called from SLAM containing the new EKF robots position, update it here for the map */
+void Map::updateRobotPosition(Eigen::Vector3f new_robot_position){
+    setRobotPositionVector(new_robot_position);
 }
 
-/* Make the current map empty, (is this needed?) */ 
+/* Make the current map empty, not needed atm */ 
 void Map::empty(){
 
+}
+
+/* Print some useful data */
+void Map::printMap(){
+    std::cout << "start node: " << getStartVector().transpose() << std::endl;
+    std::cout << std::endl << "end node: " << getEndVector().transpose() << std::endl;
+    std::cout << std::endl <<  "robots pos: " << getRobotPositionVector().transpose() << std::endl;
+    std::cout << std::endl << "lidar data: " << std::endl << getLidarData() << std::endl;
+    std::cout << std::endl << "gps data: " << std::endl << getGPSData() << std::endl;
+
+    std::cout << std::endl << "nodes | x | y | | z | px | py | g | h | f | l |" << std::endl;
+    for (int i=0; i<getNodesSize(); i++){
+        std::cout << "node " << i << ": " << getAllNodes()[i].x
+            << " | " << getAllNodes()[i].y
+            << " | " << getAllNodes()[i].z
+            << " | " << getAllNodes()[i].parent_x 
+            << " | " << getAllNodes()[i].parent_y 
+            << " | " << getAllNodes()[i].g_cost 
+            << " | " << getAllNodes()[i].h_cost 
+            << " | " << getAllNodes()[i].f_cost 
+            << " | " << getAllNodes()[i].label 
+            << std::endl;
+    }
 }
 
 // ---------------------------------------------------------------------------------
 // ------------------------------ GETTERS AND SETTERS ------------------------------
 // ---------------------------------------------------------------------------------
 
-// Might be better to initialise some of this data in the a_star.cpp file. But who knows eh
-
-void Map::setBoundaryNodes(Eigen::Matrix3Xf boundary_nodes){
-    this->boundary_nodes = boundary_nodes;
+// Might be better to initialise some of this data in the a_star.cpp file
+void Map::setRobotPositionVector(Eigen::Vector3f robot_position_vector){
+    this->robot_position_vector = robot_position_vector;
 }
 
-Eigen::Matrix3Xf Map::getBoundaryNodes(){
-    return this->boundary_nodes;
+Eigen::Vector3f Map::getRobotPositionVector(){
+    return this->robot_position_vector;
 }
 
-void Map::setPossiblePathNodes(Eigen::Matrix3Xf possible_path_nodes){
-    this->possible_path_nodes = possible_path_nodes;
+void Map::setStartVector(Eigen::Vector3f start_vector){
+    this->start_vector = start_vector;
 }
 
-Eigen::Matrix3Xf Map::getPossiblePathNodes(){
-    return this->possible_path_nodes;
+Eigen::Vector3f Map::getStartVector(){
+    return this->start_vector;
 }
 
-void Map::setRobotPosition(Eigen::Vector3f robot_position){
-    this->robot_position = robot_position;
+void Map::setEndVector(Eigen::Vector3f end_vector){
+    this->end_vector = end_vector;
 }
 
-Eigen::Vector3f Map::getRobotPosition(){
-    return this->robot_position;
+Eigen::Vector3f Map::getEndVector(){
+    return this->end_vector;
 }
 
-void Map::setStartNode(Eigen::Vector3f start_node){
-    this->start_node = start_node;
-}
-
-Eigen::Vector3f Map::getStartNode(){
-    return this->end_node;
-}
-
-void Map::setEndNode(Eigen::Vector3f end_node){
-    this->end_node = end_node;
-}
-
-Eigen::Vector3f Map::getEndNode(){
-    return this->end_node;
-}
-
-void Map::setGPSData(int gps_data){
+void Map::setGPSData(Eigen::Vector3f gps_data){
     this->gps_data = gps_data;
 }
 
-int Map::getGPSData(){
+Eigen::Vector3f Map::getGPSData(){
     return this->gps_data;
 }
 
@@ -145,4 +185,44 @@ void Map::setLidarData(Eigen::Matrix3Xf lidar_data){
 
 Eigen::Matrix3Xf Map::getLidarData(){
     return this->lidar_data;
+}
+
+void Map::setRobotNode(Node node){
+    this->robot_node = node;
+}
+
+Node Map::getRobotNode(){
+    return this->robot_node;
+}
+
+void Map::setStartNode(Node node){
+    this->start_node = node;
+}
+
+Node Map::getStartNode(){
+    return this->start_node;
+}
+
+void Map::setEndNode(Node node){
+    this->end_node = node;
+}
+
+Node Map::getEndNode(){
+    return this->end_node;
+}
+
+void Map::setAllNodes(Node* nodes){
+    this->nodes = nodes;
+}
+
+Node* Map::getAllNodes(){
+    return this->nodes;
+}
+
+void Map::setNodesSize(int size){
+    this->nodes_size = size;
+}
+
+int Map::getNodesSize(){
+    return this->nodes_size;
 }

@@ -8,61 +8,81 @@
 
 /* Struct info: 
     is parent_x & y needed? */
+enum NodeType{
+        path,
+        wall,
+        robot,
+        start,
+        end,
+        tree
+    };
+struct Node {
+    float x;
+    float y;
+    float z;
+    float parent_x;
+    float parent_y;
+    float g_cost;
+    float h_cost;
+    float f_cost;
+    NodeType label;
+};
+
+/* Change datatypes:
+    - GPS: To struct made by Brandon
+    - Lidar: keep in mind what Dmitri is doing
+    - Gyro: no clue */
 namespace map {
     class Map {
-        enum NodeType{
-            path_node,
-            wall,
-            robot_node,
-            start,
-            end,
-            tree
-        };
-        struct Node {
-            float x;
-            float y;
-            float parent_x;
-            float parent_y;
-            float g_cost;
-            float h_cost;
-            float f_cost;
-            NodeType label;
-        };
-        
         private:
             std::map<float, float> slam_map;
-            int gps_data;
+            Eigen::Vector3f gps_data;
             Eigen::Matrix3Xf lidar_data;
-            Eigen::Vector3f robot_position;
-            Eigen::Vector3f start_node;
-            Eigen::Vector3f end_node;
-            Eigen::Matrix3Xf boundary_nodes;
-            Eigen::Matrix3Xf possible_path_nodes;
-
+            Eigen::Vector3f robot_position_vector;
+            Eigen::Vector3f start_vector;
+            Eigen::Vector3f end_vector;
+            Node robot_node;
+            Node start_node;
+            Node end_node;
+            Node* nodes;
+            int nodes_size;
             void initBoundaryNodes();
             void initNodes();
-            void setGPSData(int gps_data);
+            void setGPSData(Eigen::Vector3f gps_data);
             void setLidarData(Eigen::Matrix3Xf lidar_data);
-            void setRobotPosition(Eigen::Vector3f robot_position);
-            void setStartNode(Eigen::Vector3f start_node);
-            void setEndNode(Eigen::Vector3f end_node);
-            void setBoundaryNodes(Eigen::Matrix3Xf boundary_nodes);
-            void setPossiblePathNodes(Eigen::Matrix3Xf possible_path_nodes);
+            void setRobotPositionVector(Eigen::Vector3f robot_position_vector);
+            void setStartVector(Eigen::Vector3f start_vector);
+            void setEndVector(Eigen::Vector3f end_vector);
+            void setBoundaryNodes(Node boundary_nodes);
+            void setPossiblePathNodes(Node possible_path_nodes);
+            Node* matToNodes();
+            Node initRobotPositionNode();
+            Node initStartPositionNode();
+            Node initEndPositionNode();
+            void setAllNodes(Node* node);
+            void setRobotNode(Node node);
+            void setStartNode(Node node);
+            void setEndNode(Node node);
+            void setNodesSize(int size);
         public:
             Map();
-            Map(Eigen::Matrix3Xf lidar_data, int gps_data);
+            Map(Eigen::Matrix3Xf lidar_data, Eigen::Vector3f gps_data);
             void init();
             void fillMapWithCoordinates();
             void fillMapWithPointCloud();
             void empty();
             void printMap();
-            int getGPSData();
+            Eigen::Vector3f getGPSData();
             Eigen::Matrix3Xf getLidarData();
-            Eigen::Vector3f getRobotPosition();
-            Eigen::Vector3f getStartNode();
-            Eigen::Vector3f getEndNode();
-            Eigen::Matrix3Xf getBoundaryNodes();
-            Eigen::Matrix3Xf getPossiblePathNodes(); 
+            Eigen::Vector3f getRobotPositionVector();
+            Eigen::Vector3f getStartVector();
+            Eigen::Vector3f getEndVector();
+            Node* getAllNodes();
+            Node getRobotNode();
+            Node getStartNode();
+            Node getEndNode();
+            int getNodesSize();
+            void updateRobotPosition(Eigen::Vector3f new_robot_position);
     };
 }
 
