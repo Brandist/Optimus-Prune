@@ -21,7 +21,7 @@ public:
     Sensor(int,int);
     ~Sensor();
     float ReadSensor();
-    std::string Sensor::UnitTest();
+    std::string UnitTest();
     //void SetRiseTick(int);
    // uint32_t GetRiseTick();
 };
