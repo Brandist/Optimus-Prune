@@ -1,4 +1,4 @@
-#include "Headers/Sensor.hpp"
+#include "../Headers/Sensor.hpp"
 
 static uint32_t rise_tick = 0;    // Pulse rise time tick value
 static uint32_t pulse_width = 0;  // Last measured pulse width (us)
@@ -11,7 +11,7 @@ static uint32_t pulse_width = 0;  // Last measured pulse width (us)
 */
 float Sensor::ReadSensor()
 {
-    bool wasTriggered = Trigger();
+    /*bool wasTriggered = */Trigger();
     // if (wasTriggered)
     // {
     //     //start reading the pulse
@@ -53,7 +53,8 @@ std::string Sensor::UnitTest(){
     {
         return "Failed";
     }
-    ReadSensor();
+    float pulseLenght = ReadSensor();
+    return ("Pulse length = " + std::to_string(pulseLenght));
 }
 
 Sensor::Sensor(int listenPin, int triggerPin)
