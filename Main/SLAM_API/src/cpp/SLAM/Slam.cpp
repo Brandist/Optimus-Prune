@@ -1,11 +1,4 @@
-#include <iostream>
-#include <string>
-#include <Eigen/Core>
 #include "Slam.h"
-#include "mapping/imapping/Imap.h"
-#include "../controllers/Icontrollers/IGPSController.h"
-#include "../controllers/Icontrollers/IGyroController.h"
-#include "../controllers/Icontrollers/ILidarController.h"
 
 /* This is the main SLAM file. Consider this as the main loop
     initalise SLAM with the controllers for the different components
@@ -15,47 +8,58 @@
         - the map will be an object that is used for pathfinding
         - the map contains points (vectors) containing the lidar data
             - each type of vector has a label indicating if its a wall, possible path, begin and end point
-        - TODO: - Create the map, either via an map object, or set of vector, something that is easy to visualise
-                - Implement the SLAM math functions (odometry, landmarks) output and make it visual in the map 
-    The slam process should include (apart from map building) the following:
+        - TODO: Implement the SLAM math functions (odometry, landmarks) output and make it visual in the map 
+    The slam process should include the following:
+        - map building and updating
         - Odometry
         - Landmark extraction from the lidar data
         - the output should be included in the map building as well */
 using namespace SLAM;
 
-Slam::Slam(){
-    start();
-}
+Slam::Slam(){}
 
 Slam::Slam(controllers::GPSController gps_cont, controllers::GyroController gyro_cont, controllers::LidarController lidar_cont){
     this->gps_cont = gps_cont;
     this->gyro_cont = gyro_cont;
     this->lidar_cont = lidar_cont;
-
-    start();
 }
 
-bool Slam::start(){
-    setGPSData(gps_cont.requestData());
+void Slam::init(){
+    // setGPSData(gps_cont.requestData());
+    /* dummy vector data for robot position since I cannot simulate the raw gps data yet */
+    setGPSData(Eigen::Vector3f(0.0, 2.0, 1.0));
     setGyroData(gyro_cont.requestData());
     setLidarData(lidar_cont.requestData());
 
-    map::Map slam_map(getLidarData(), getGPSData());
-    // constructor of a_star
+    this->slam_map = map::Map(getLidarData(), getGPSData());
+    this->ekf = EKF::Ekf();
+}
+
+bool Slam::start(){
     slam_map.init();
+    ekf.init();
+    // constructor of a_star
+    slam_map.printMap();
+
+    ekf.performOdometry();
+    slam_map.updateRobotPosition(ekf.getRobotPosition());
+
+    ekf.performLandmarkExtraction();
+    slam_map.updateRobotPosition(ekf.getRobotPosition());
+
 
     // Work in progress
     // get and process the odometry data, landmark extraction etc
     //  - odometry and landmark extraction should be called EKF
-    //  - unknown if EKF should have direct communication with the map
     // get the GPS, Gyro, IMU data 
     //  - process the data
     // update the map accordingly
     // call the pathfinding algorithm
 
     // a_star init which will request the set of Nodes (containing all the nodes)
-    // a_start calculateOptimalPath will take in the robot_pos and end_nodes 
+    // a_start calculateOptimalPath will take in the robot_pos and end_node
 
+    // some exception checking here, return false if something went wrong
     return false;
 }
 
@@ -63,11 +67,11 @@ bool Slam::start(){
 // ---------------------------------------------------------------------------------
 // ------------------------------ GETTERS AND SETTERS ------------------------------
 // ---------------------------------------------------------------------------------
-void Slam::setGPSData(int gps_data){
+void Slam::setGPSData(Eigen::Vector3f gps_data){
     this->gps_data = gps_data;
 }
 
-int Slam::getGPSData(){
+Eigen::Vector3f Slam::getGPSData(){
     return this->gps_data;
 }
 
@@ -76,7 +80,7 @@ void Slam::setGyroData(int gyro_data){
 }
 
 int Slam::getGyroData(){
-    return this->gps_data;
+    return this->gyro_data;
 }
 
 void Slam::setLidarData(Eigen::Matrix3Xf lidar_data){
