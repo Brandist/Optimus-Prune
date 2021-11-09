@@ -1,5 +1,5 @@
 
-#include "Headers/Sensor.hpp"
+#include "../Headers/Sensor.hpp"
 #include<unistd.h>
 int main(void){
 
