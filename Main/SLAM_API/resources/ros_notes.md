@@ -2,6 +2,14 @@
 
 ROS Noetic should already be installed thanks to Ijdo
 
+## Important
+
+Make sure to run 
+
+> roscore
+
+in a different terminal, and keep it running
+
 ## ROS installation and sourcing: 
 
 ROS is installed under:
@@ -31,7 +39,7 @@ In the root of your project, compike with:
 This will generate the build and devel directories
 
 To generate the package files
-> source ~/.devel/setup.zsh
+> source ./devel/setup.zsh
 
 This will add your ROS package to the ROS package list, which can be seen in:
 > rosrun ? 
