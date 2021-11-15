@@ -22,7 +22,7 @@ Direct communication between SLAM and these controllers is still something we're
 
 ### Localisation 
 
-For localisation, normally SLAM uses the LiDaR on order to extract landmarks for localisation, but since a GPS-RTK is available, we can modify the SLAM to use the GPS for localisation. Ofcourse GPS isnt enough, so landmark extraction and odometry is still necessary for making corrections. Since GPS data is the priority, this repository currently doesnt focus on the landmarks as of 28-10-2021. It does focus on Odometry as of 09-11-2021. Landmarks is being tested
+For localisation, normally SLAM uses the LiDaR on order to extract landmarks for localisation, but since a GPS-RTK is available, we can modify the SLAM to use the GPS for localisation. GPS might not be enough, so odometry and landmark extraction might be necessary for making corrections, this requires testing with real field data. Although, the SLAM structure is made with odometry and landmark extraction in mind, GPS localisation is the priority.
 
 **Parts**
 
@@ -33,6 +33,8 @@ For localisation, normally SLAM uses the LiDaR on order to extract landmarks for
 
 ### Mapping
 
+Internally, mapping is done via a set of coordinates in the form of a vector, essentially making a matrix containing the x, y, z coordinates of every point. The points can be points from the pointcloud, thanks to the Lidar, and the GPS point indicating the robot position. For visual mapping, the map created from the raw Lidar data, because pointclouds can be easily viewed in software, it is still unclear how the concatenation of multiple pointclouds works. 
+
 - Lidar
 - GPS
 - landmarks
@@ -41,14 +43,17 @@ For localisation, normally SLAM uses the LiDaR on order to extract landmarks for
 
 ### Navigation
 
+Navigation is essentially a pathfinding algorithm used for calculating the optimal path from point A to B. Where A is the current robot position, indicated by the GPS and corrected by odometry and possibly landmark extraction, and B is the current end-node, which will be the end of the row or as far as the Lidar can see. If Point A is the end of the row, then point B will be the start coordinates of the next row, so the optimal path will be a turn to the next row.
+
 - Pathfinding algorithms (D* lite, or A*, something lightweight)
 - Formatting of the path data type so we can tell the robot where it needs to go next in a format that the robot understands
   - Whole path?
   - Next node?
 
 ## Project structure move to ROS pub-sub based model
-- 11-11-2021
-  
+
+- **When completed:** 11-11-2021
+
 The entire project works on a ROS pub-sub based model, where the publisher (src/cpp/publisher) sends the GPS/LIDAR each through their different topic. The subscriber (src/cpp/subsriber) then subscribes to those topic and receives the data. The publisher and subscriber both contain only 1 cpp main file. These main files are only responsible to sending and receiving data respectivily. The API and SLAM based logic are done in different packages, both included by their respective pub sub package.
 
 The code of the pub and sub files can be found here: 
