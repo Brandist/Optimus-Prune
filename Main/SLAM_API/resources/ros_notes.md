@@ -91,7 +91,7 @@ find_package(catkin REQUIRED COMPONENTS
 )
 ```
 
-And in catkin_package add the message_generation dependency as well, like this:
+And in catkin_package add the message_runtime dependency, like this:
 
 ```
 catkin_package(
