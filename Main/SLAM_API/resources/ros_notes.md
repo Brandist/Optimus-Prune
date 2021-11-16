@@ -52,6 +52,98 @@ In the root of the directory. Where the build and devel directories are present.
 
 Dont forget to source the setup.zsh or setup.bash
 
-## Tip:
+## ROS messages (.msg files)
 
-Make a Makefile containing the catkin_make and clean etc
+ROS msg are files that essentially create a header of a custom datatype, like a struct or class. The .msg types are used to send a struct on the topic instead of a single data type such as a String or int.
+
+.msg files are located in "packageName/msg/someMsg.msg" and the file itself can look like this:
+
+```
+Header header
+float64[] x
+float64[] y
+float64[] z
+```
+
+The above file states a struct containing 3 float arrays for x, y, z coordinates. float64 translates to a double in c++ code, in c++, float32 is an actual float. [Follow this link for all available datatypes](http://wiki.ros.org/msg).
+
+In order to compile and use the message in code, we need to alter the CMakeLists.txt and package.xml first. So, after creating the .msg file in /src/cpp/packageName/msg/, add the following lines to the CMakeLists.txt
+
+```
+add_message_files(
+  FILES
+  someMsg.msg
+)
+
+generate_messages(
+  DEPENDENCIES
+  std_msgs
+)
+```
+
+place the above code below find_package. Also in find_package add the message_generation dependency, like this:
+
+```
+find_package(catkin REQUIRED COMPONENTS
+  roscpp
+  std_msgs
+  message_generation
+)
+```
+
+And in catkin_package add the message_generation dependency as well, like this:
+
+```
+catkin_package(
+ CATKIN_DEPENDS roscpp std_msgs message_runtime apilib
+)
+```
+
+For the package.xml we need to add some dependencies. Add the following lines at the end of the existing dependencies.
+
+```
+<build_depend>message_generation</build_depend>
+<exec_depend>message_runtime</exec_depend>
+```
+
+After editing these files, the someMsg.msg header file can be included in the main cpp file. No header has to be created by the user, ROS does this when compiling automatically. Include the header like this:
+
+```
+#include "packageName/someMsg.h"
+```
+
+After compiling the header is located in the ROS folder, which can be generated with this command:
+
+> rosmsg list
+
+
+
+This will show every msg generated from every package available to you. A lot of different messages are available, such as arrays, vectors, even pointclouds from the PCL lib, odometry, robot status etc. But in this case a custom message is added for scaleability. If the msg isnt in the list, make sure to compile it a couple of times. And make sure the include names correspond with the file names, the same goes for the CMakeLists.txt names. The include line might show an error as well, this shouldnt be a problem when compiling. 
+
+To actually use the message and initialise the datatypes. We need to change the datatype from the ROS publisher object created from the tutorial. Like this:
+
+**previously:**
+
+```
+ros::Publisher chatter_pub = n.advertise<std_msgs::String>("chatter", 1000);
+```
+
+**new:**
+
+```
+ros::Publisher some_var_name = n.advertise<packageName::someMsg>("topic_name", 1000);
+```
+
+Then we make an object of the message:
+
+```
+packageName::someMsg msg;
+```
+
+and, just like a struct, we can assign the msg variables, like this:
+
+```
+msg.some_variable = 10;
+```
+
+Make sure that the datatypes correspond with each other.
