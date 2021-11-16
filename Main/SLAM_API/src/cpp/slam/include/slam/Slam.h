@@ -1,6 +1,7 @@
 // SLAM interface
 #include <Eigen/Core>
 #include <iostream>
+#include <vector>
 #include <string>
 #include "slam/imapping/Imap.h"
 #include "slam/iefk/iefk.h"
@@ -27,6 +28,7 @@ namespace SLAM{
             int getGyroData();
             Eigen::Matrix3Xf getLidarData();
             void init();
+            void initLidarData(std::vector<float> x, std::vector<float> y, std::vector<float> z);
             bool start();
     };
 }

@@ -5,6 +5,7 @@ using namespace map;
 
 Map::Map(){}
 
+// deprecated
 Map::Map(Eigen::Matrix3Xf lidar_data, Eigen::Vector3f gps_data){
     setLidarData(lidar_data);
     setGPSData(gps_data);

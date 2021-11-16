@@ -19,17 +19,34 @@ using namespace SLAM;
 Slam::Slam(){}
 
 void Slam::init(){
-    // setGPSData(gps_cont.requestData());
-    /* dummy vector data for robot position since I cannot simulate the raw gps data yet */
-    setGPSData(Eigen::Vector3f(0.0, 2.0, 1.0));
-    // setGyroData(gyro_cont.requestData());
-    // setLidarData(lidar_cont.requestData());
-
-    this->slam_map = map::Map(getLidarData(), getGPSData());
+    this->slam_map = map::Map();
     this->ekf = EKF::Ekf();
 }
 
+void Slam::initLidarData(std::vector<float> x, std::vector<float> y, std::vector<float> z){
+    // Some error handling for security, this should be done with exception handling later on
+
+    int matrix_size = x.size();
+    Eigen::Matrix3Xf mat(3, matrix_size);
+
+    for (int i=0; i<matrix_size; i++){
+        float temp_x = x.at(i);
+        float temp_y = y.at(i);
+        float temp_z = z.at(i);
+        Eigen::Vector3f vec(temp_x, temp_y, temp_z);
+        mat.col(i) = vec;
+    }
+
+    setLidarData(mat);
+}
+
+// TODO: Think about what methods should be called once and what continously
 bool Slam::start(){
+    // This should be a method just like the Lidar data
+    setGPSData(Eigen::Vector3f(0.0, 2.0, 1.0));
+    slam_map.setLidarData(getLidarData());
+    slam_map.setGPSData(getGPSData());
+
     slam_map.init();
     ekf.init();
     // constructor of a_star
@@ -40,7 +57,6 @@ bool Slam::start(){
 
     ekf.performLandmarkExtraction();
     slam_map.updateRobotPosition(ekf.getRobotPosition());
-
 
     // Work in progress
     // get and process the odometry data, landmark extraction etc

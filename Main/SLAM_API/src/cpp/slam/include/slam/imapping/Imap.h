@@ -48,8 +48,6 @@ namespace map {
             int nodes_size;
             void initBoundaryNodes();
             void initNodes();
-            void setGPSData(Eigen::Vector3f gps_data);
-            void setLidarData(Eigen::Matrix3Xf lidar_data);
             void setRobotPositionVector(Eigen::Vector3f robot_position_vector);
             void setStartVector(Eigen::Vector3f start_vector);
             void setEndVector(Eigen::Vector3f end_vector);
@@ -72,6 +70,8 @@ namespace map {
             void fillMapWithPointCloud();
             void empty();
             void printMap();
+            void setGPSData(Eigen::Vector3f gps_data);
+            void setLidarData(Eigen::Matrix3Xf lidar_data);
             Eigen::Vector3f getGPSData();
             Eigen::Matrix3Xf getLidarData();
             Eigen::Vector3f getRobotPositionVector();
