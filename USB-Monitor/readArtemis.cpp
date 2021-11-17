@@ -61,10 +61,8 @@ std::vector<std::string> split(std::string &iString, char delim){
 // Fill up de struct with the data
 void putDataInStruct(std::string &iString, char delim, struct ArtemisData &data){
 	std::vector<std::string> VS = split(iString, delim);
-	std::string item;
 	for(int i = 0; i < VS.size(); i++) {
-		item = VS[i];
-		putItemInStruct(data, i, item);
+		putItemInStruct(data, i, VS[i]);
 	}
 }
 
