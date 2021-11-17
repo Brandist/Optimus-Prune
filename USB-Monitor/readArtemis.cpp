@@ -64,12 +64,12 @@ void putDataInStruct(std::string &iString, char delim, struct ArtemisData &data)
 	std::string item;
 	for(int i = 0; i < VS.size(); i++) {
 		item = VS[i];
-		changeItemInStruct(data, i, item);
+		putItemInStruct(data, i, item);
 	}
 }
 
 // Fill up 1 item in the struct
-void changeItemInStruct(struct ArtemisData &data, int index, std::string &iString) {
+void putItemInStruct(struct ArtemisData &data, int index, std::string &iString) {
 	switch (index)
 	{
 	case 0:
