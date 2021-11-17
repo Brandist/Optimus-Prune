@@ -28,6 +28,7 @@ namespace SLAM{
             int getGyroData();
             Eigen::Matrix3Xf getLidarData();
             void init();
+            void initGPSData(float x, float y, float z);
             void initLidarData(std::vector<float> x, std::vector<float> y, std::vector<float> z);
             bool start();
     };

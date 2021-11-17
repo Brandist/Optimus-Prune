@@ -23,6 +23,10 @@ void Slam::init(){
     this->ekf = EKF::Ekf();
 }
 
+void Slam::initGPSData(float x, float y, float z){
+    setGPSData(Eigen::Vector3f(x,y,z));
+}
+
 void Slam::initLidarData(std::vector<float> x, std::vector<float> y, std::vector<float> z){
     // Some error handling for security, this should be done with exception handling later on
 
@@ -43,7 +47,6 @@ void Slam::initLidarData(std::vector<float> x, std::vector<float> y, std::vector
 // TODO: Think about what methods should be called once and what continously
 bool Slam::start(){
     // This should be a method just like the Lidar data
-    setGPSData(Eigen::Vector3f(0.0, 2.0, 1.0));
     slam_map.setLidarData(getLidarData());
     slam_map.setGPSData(getGPSData());
 

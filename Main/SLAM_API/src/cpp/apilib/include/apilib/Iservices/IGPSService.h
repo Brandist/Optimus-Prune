@@ -1,6 +1,7 @@
 // This is just the interface of the corresponding service class
 #include <iostream>
 #include <string>
+#include <vector>
 #include "apilib/Ihardware/GPS.h"
 
 #ifndef _gpsservice_h
@@ -11,11 +12,10 @@ namespace services{
         private:
             hardware::GPS gps;
             int raw_data;
-            int convertRawDataToPosVector();
             void setRawData(int raw_data);
         public:
             GPSService();
-            int requestData();
+            std::vector<float> requestData();
             int getRawData();
     };
 }

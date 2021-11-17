@@ -4,32 +4,30 @@
 #include "ros/ros.h"
 #include "std_msgs/String.h"
 #include "publisher/lidar.h"
+#include "publisher/gps.h"
 #include <Eigen/Core>
 
 using namespace std;
 
-/* Is there ROS communication here?
- Maybe send the incoming gps, gyro and lidar data to SLAM via ROS bus
- then SLAM can read the data, so we dont need to make an instance of SLAM
- Or make an instance of SLAM and throw the controllers in the constructor so SLAM can directly communicate with the controllers */
+
 int main(int argc, char **argv) {
     controllers::GPSController gps_cont;
     controllers::LidarController lidar_cont;
-
-    int g_data = gps_cont.requestData();
 
     ros::init(argc, argv, "talker");
     ros::NodeHandle n;
 
     // TODO: add second topic for the GPS, which separate msg
-    // ros::Publisher gps_data = n.advertise<publisher::lidar>("gps", 1000);
+    ros::Publisher gps_data = n.advertise<publisher::gps>("gps_topic", 1000);
     ros::Publisher lidar_data = n.advertise<publisher::lidar>("lidar_topic", 1000);
 
     ros::Rate loop_rate(10);
 
     int count=0;
-    publisher::lidar msg;
+    publisher::gps msg_gps;
+    publisher::lidar msg_lidar;
     while(ros::ok()){
+        std::vector<float> g_data = gps_cont.requestData();
         Eigen::Matrix3Xf l_data = lidar_cont.requestData();
 
         std::vector<float> x_a, y_a, z_a;
@@ -40,13 +38,17 @@ int main(int argc, char **argv) {
             z_a.push_back(l_data.col(i).z());
         }
 
-        msg.x = x_a;
-        msg.y = y_a;
-        msg.z = z_a;
+        msg_gps.aX = g_data.at(0);
+        msg_gps.aY = g_data.at(1);
+        msg_gps.aZ = g_data.at(2);
+
+        msg_lidar.x = x_a;
+        msg_lidar.y = y_a;
+        msg_lidar.z = z_a;
         
         // ROS_INFO("%f ", msg.x[0]);
-
-        lidar_data.publish(msg);
+        gps_data.publish(msg_gps);
+        lidar_data.publish(msg_lidar);
         ros::spinOnce();
 
         loop_rate.sleep();

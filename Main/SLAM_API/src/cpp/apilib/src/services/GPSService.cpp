@@ -6,19 +6,15 @@ GPSService::GPSService() {
     
 }
 
-/*  The conversion from raw data to SLAM-readable data
-    input: Dont know yet
-    output: 3d Vector */
-int GPSService::convertRawDataToPosVector(){
-    int data = getRawData();
-    // Do the actual conversion here
-    return raw_data;
-}
-
-int GPSService::requestData(){
+// This should actually be the readGps msg and the entire message should be a struct (made by Brandon) and filled there
+std::vector<float> GPSService::requestData(){
     // Call the hardware layer to get the raw data
     int data = gps.readRawData();
-    int gps_data = convertRawDataToPosVector();
+
+    std::vector<float> gps_data;
+    gps_data.push_back(0.0); // x
+    gps_data.push_back(2.0); // y
+    gps_data.push_back(100.0); // z
     return gps_data;
 }
 

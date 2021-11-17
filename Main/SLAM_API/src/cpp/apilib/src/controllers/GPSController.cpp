@@ -11,7 +11,7 @@ GPSController::GPSController(){
     - change output
     - Add some kind of exception handling
  */
-int GPSController::requestData(){
-    int data = gps_service.requestData();
+std::vector<float> GPSController::requestData(){
+    std::vector<float> data = gps_service.requestData();
     return data;
 }

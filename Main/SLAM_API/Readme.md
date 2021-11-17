@@ -65,9 +65,6 @@ The subscriber package includes the slam package. slam contains all the SLAM bas
 
 Linking the pub/apilib and sub/slam packages together is achieved by manipulating the CMakeLists.txt an package.xml, both created by the catkin_create_pkg command. (source: https://roboticsbackend.com/ros-include-cpp-header-from-another-package/). The ROS commands used to create the structure are documented and can be found in the resources folder.
 
-**TODO:** 
-- Replace the dummy String data to a custom ros-msg containing the GPS and Lidar data
-
 ## Additional information
 
 This repository is written in c++ for a ROS-Noetic based implemention: http://wiki.ros.org/noetic
