@@ -25,35 +25,35 @@ int closeConnection()
 - So far only closes the serialport.
 
 int sendData(struct ArtemisData data)
-struct ArtemisData data : The data to be send;
+- struct ArtemisData data : The data to be send;
 - TODO
 
 bool is_number(const char c)
-const char c : The char to be checked;
+- const char c : The char to be checked;
 - Checks if a certain char is a number or not.
-returns true or false;
+- returns true or false;
 
 bool is_dash(const char c)
-const char c : The char to be checked;
+- const char c : The char to be checked;
 - Checks if a certain char is a dash or not. This has to be checked because the data given could be negative.
-returns true or false;
+- returns true or false;
 
 std::vector<std::string> split(std::string &iString, char delim)
-std::string &iString : The input string to split;
-char delim : The deliminator of the string;
+- std::string &iString : The input string to split;
+- char delim : The deliminator of the string;
 - Splits a string using a deliminator and puts this in a std::vector<std::string>.
-returns output : A vector collection of strings;
+- returns output : A vector collection of strings;
 
 void putDataInStruct(std::string &iString, char delim, struct ArtemisData &data)
-std::string &iString : The input string to put into the struct;
-char delim : The deliminator of the string;
-struct ArtemisData &data : The struct to put the data in;
+- std::string &iString : The input string to put into the struct;
+- char delim : The deliminator of the string;
+- struct ArtemisData &data : The struct to put the data in;
 - Goes through all the data in the string and asings it to the struct.
 
 void putItemInStruct(struct ArtemisData &data, int index, std::string &iString)
-struct ArtemisData &data : The struct to put the data in;
-int index : Identifies where the data needs to be put in the struct;
-std::string &iString : The data;
+- struct ArtemisData &data : The struct to put the data in;
+- int index : Identifies where the data needs to be put in the struct;
+- std::string &iString : The data;
 - Uses a switch to put the data in the right place in the struct.
 
 void collectAndSend() 
