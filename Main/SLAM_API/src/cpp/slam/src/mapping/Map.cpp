@@ -5,12 +5,6 @@ using namespace map;
 
 Map::Map(){}
 
-// deprecated
-Map::Map(Eigen::Matrix3Xf lidar_data, Eigen::Vector3f gps_data){
-    setLidarData(lidar_data);
-    setGPSData(gps_data);
-}
-
 /* get the lidar data as a Matrix object,
     convert the Matrix object to a Node (custom struct)
     Make a list of nodes. Nodes contain a label giving the Nodes a label
@@ -23,7 +17,7 @@ void Map::init(){
 
     setRobotPositionVector(getGPSData());
     setStartVector(getRobotPositionVector());
-    setEndVector(mat.col(mat.cols() - 1));
+    setEndVector(mat.col(mat.cols()-1));
 
     setAllNodes(nodes);
     setRobotNode(initRobotPositionNode());
@@ -33,13 +27,14 @@ void Map::init(){
     delete[] nodes;
 }
 
+// Conversion of a matrix to nodes, this is the entire lidar incoming data
 Node* Map::matToNodes(){
     Eigen::Matrix3Xf mat = getLidarData();
     setNodesSize(mat.cols());
     int nodes_size = getNodesSize();
     Node* nodes = new Node[nodes_size];
 
-    for (int i=0; i<nodes_size; ++i){
+    for (int i=0; i<nodes_size; i++){
         Node node;
         node.x = mat.col(i).x();
         node.y = mat.col(i).y();
@@ -56,6 +51,7 @@ Node* Map::matToNodes(){
     return nodes;
 }
 
+// Get the GPS vector and convert it to a Node
 Node Map::initRobotPositionNode(){
         Node node;
         node.x = getRobotPositionVector().x();
@@ -70,6 +66,7 @@ Node Map::initRobotPositionNode(){
         return node;
 }
 
+// Get the starting position vector of the working day and convert it to a Node
 Node Map::initStartPositionNode(){
         Node node;
         node.x = getStartVector().x();
@@ -84,6 +81,7 @@ Node Map::initStartPositionNode(){
         return node;
 }
 
+// Get the End position (end of the row) and convert it to a Node
 Node Map::initEndPositionNode(){
         Node node;
         node.x = getEndVector().x();
@@ -122,9 +120,9 @@ void Map::empty(){
 
 /* Print some useful data */
 void Map::printMap(){
-    std::cout << "start node: " << getStartVector().transpose() << std::endl;
-    std::cout << std::endl << "end node: " << getEndVector().transpose() << std::endl;
-    std::cout << std::endl <<  "robots pos: " << getRobotPositionVector().transpose() << std::endl;
+    std::cout << std::endl << "start node: " << std::endl << getStartVector() << std::endl;
+    std::cout << std::endl << "end node: " << std::endl << getEndVector() << std::endl;
+    std::cout << std::endl <<  "robots pos: " << std::endl << getRobotPositionVector() << std::endl;
     std::cout << std::endl << "lidar data: " << std::endl << getLidarData() << std::endl;
     std::cout << std::endl << "gps data: " << std::endl << getGPSData() << std::endl;
 

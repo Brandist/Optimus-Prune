@@ -47,8 +47,8 @@ void Slam::initLidarData(std::vector<float> x, std::vector<float> y, std::vector
 // TODO: Think about what methods should be called once and what continously
 bool Slam::start(){
     // This should be a method just like the Lidar data
-    slam_map.setLidarData(getLidarData());
     slam_map.setGPSData(getGPSData());
+    slam_map.setLidarData(getLidarData());
 
     slam_map.init();
     ekf.init();
@@ -75,7 +75,6 @@ bool Slam::start(){
     // some exception checking here, return false if something went wrong
     return false;
 }
-
 
 // ---------------------------------------------------------------------------------
 // ------------------------------ GETTERS AND SETTERS ------------------------------

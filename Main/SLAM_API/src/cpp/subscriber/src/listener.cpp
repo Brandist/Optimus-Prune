@@ -30,6 +30,5 @@ int main(int argc, char **argv){
     ros::Subscriber sub_gps = n.subscribe("gps_topic", 1000, doSomethingWithGPS);
 
     ros::spin();
-
     return 0;
 }
