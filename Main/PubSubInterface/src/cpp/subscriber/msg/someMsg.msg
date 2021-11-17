@@ -1,0 +1,3 @@
+Header header
+uint32 some_variable
+uint32 some_variable_2
