@@ -35,7 +35,9 @@ int sendData(std::string data);
 int print(std::string str);
 bool is_number(const char c);
 bool is_dash(const char c);
-void split(std::string &iString, char delim, Out result);
-
+std::vector<std::string> split(std::string &iString, char delim);
+void putDataInStruct(std::string &iString, char delim, struct ArtemisData &data);
+void changeItemInStruct(struct ArtemisData &data, int index, std::string &iString);
+void collectAndSend();
 
 #endif
