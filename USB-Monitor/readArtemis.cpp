@@ -36,12 +36,6 @@ int sendData(struct ArtemisData data) {
 	return 0;
 }
 
-// Just an easier print
-int print(std::string str) {
-	std::cout << str << std::endl;
-	return 0;
-}
-
 // Check if character is a number
 bool is_number(const char c) {
 	return !isblank(c) && isdigit(c);

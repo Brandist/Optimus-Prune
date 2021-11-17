@@ -32,7 +32,6 @@ int init();
 std::string readArtemis();
 int closeConnection();
 int sendData(std::string data);
-int print(std::string str);
 bool is_number(const char c);
 bool is_dash(const char c);
 std::vector<std::string> split(std::string &iString, char delim);
