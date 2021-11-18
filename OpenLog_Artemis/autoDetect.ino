@@ -1207,6 +1207,8 @@ deviceType_e testDevice(uint8_t i2cAddress, uint8_t muxAddress, uint8_t portNumb
       }
       break;
     case 0x42:
+    case 0x43:
+    case 0x44:
       {
         //Confidence: High - Sends/receives CRC checked data response
         setQwiicPullups(0); //Disable pullups to minimize CRC issues
@@ -1220,13 +1222,26 @@ deviceType_e testDevice(uint8_t i2cAddress, uint8_t muxAddress, uint8_t portNumb
         setQwiicPullups(settings.qwiicBusPullUps); //Re-enable pullups for normal discovery
       }
       break;
-    case 0x44:
     case 0x45:
       {
         //Confidence: High - Configures ADC mode
         SFE_ADS122C04 sensor;
         if (sensor.begin(i2cAddress, qwiic) == true) //Address, Wire port
           return (DEVICE_ADC_ADS122C04);
+      }
+      break;
+    case 0x46:
+      {
+        //Confidence: High - Sends/receives CRC checked data response
+        setQwiicPullups(0); //Disable pullups to minimize CRC issues
+        SFE_UBLOX_GNSS sensor;
+        if(settings.printGNSSDebugMessages == true) sensor.enableDebugging(); // Enable debug messages if required
+        if (sensor.begin(qwiic, i2cAddress) == true) //Wire port, address
+        {
+          setQwiicPullups(settings.qwiicBusPullUps); //Re-enable pullups to prevent ghosts at 0x43 onwards
+          return (DEVICE_GPS_UBLOX);
+        }
+        setQwiicPullups(settings.qwiicBusPullUps); //Re-enable pullups for normal discovery
       }
       break;
     case 0x48:
