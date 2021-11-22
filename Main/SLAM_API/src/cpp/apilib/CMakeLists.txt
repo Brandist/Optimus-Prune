@@ -21,10 +21,13 @@ include_directories(
 add_library(${PROJECT_NAME}
   src/controllers/GPSController.cpp
   src/controllers/LidarController.cpp
+  src/controllers/WheelController.cpp
   src/services/GPSService.cpp
   src/services/LidarService.cpp
+  src/services/WheelService.cpp
   src/hardware/GPS.cpp
   src/hardware/Lidar.cpp
+  src/hardware/Wheel.cpp
 )
 
 target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES})
