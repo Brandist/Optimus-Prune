@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <Eigen/Core>
+#include <math.h>
 #include "slam/imapping/Imap.h"
 
 #ifndef _ekf_h
@@ -11,20 +12,19 @@ namespace EKF{
         private:
             map::Map slam_map;
             Eigen::Vector3f robot_position;
-            float left_wheel_count;
-            float right_wheel_count;
+            float left_wheel_tick;
+            float right_wheel_tick;
             void setRobotPosition(Eigen::Vector3f robot_position);
-            void setLeftWheelCount(float left_wheel_count);
-            void setRightWheelCount(float left_right_count);
+            void setLeftWheelTick(float left_wheel_tick);
+            void setRightWheelTick(float right_wheel_tick);
         public:
             Ekf();
-            void init(Eigen::Vector3f robot_position, float left_wheel_count, float right_wheel_count);
+            void init(Eigen::Vector3f robot_position, float left_wheel_tick, float right_wheel_tick);
             void performOdometry();
             void performLandmarkExtraction();
-            void updateRobotPosition();
             Eigen::Vector3f getRobotPosition();
-            float getLeftWheelCount();
-            float getRightWheelCount();
+            float getLeftWheelTick();
+            float getRightWheelTick();
     };
 }
 
