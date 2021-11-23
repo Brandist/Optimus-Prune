@@ -61,7 +61,9 @@ bool Slam::start(){
     // slam_map.printMap();
 
     ekf.performOdometry();
-    // slam_map.updateRobotPosition(ekf.getRobotPosition());
+    slam_map.updateRobotPosition(ekf.getRobotPosition());
+
+    // slam_map.printMap();
 
     // ekf.performLandmarkExtraction();
     // slam_map.updateRobotPosition(ekf.getRobotPosition());
