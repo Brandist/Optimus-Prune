@@ -52,9 +52,9 @@ int main(int argc, char **argv) {
         msg_gps.aY = g_data.at(1);
         msg_gps.aZ = g_data.at(2);
 
-        msg_wheel.left_count = 1.5;
-        msg_wheel.right_count = 2.5;
-        
+        msg_wheel.left_count = count*2;
+        msg_wheel.right_count = count*3;
+
         // ROS_INFO("%f ", msg.x[0]);
         lidar_data.publish(msg_lidar);
         gps_data.publish(msg_gps);

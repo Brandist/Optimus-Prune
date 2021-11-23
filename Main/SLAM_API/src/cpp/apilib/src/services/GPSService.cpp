@@ -12,9 +12,9 @@ std::vector<float> GPSService::requestData(){
     int data = gps.readRawData();
 
     std::vector<float> gps_data;
-    gps_data.push_back(0.0); // x
+    gps_data.push_back(1.0); // x
     gps_data.push_back(2.0); // y
-    gps_data.push_back(100.0); // z
+    gps_data.push_back(2.0); // z
     return gps_data;
 }
 
