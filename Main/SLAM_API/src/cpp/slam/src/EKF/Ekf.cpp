@@ -6,13 +6,20 @@ Ekf::Ekf(){
     this->slam_map = map::Map();
 }
 
-void Ekf::init(){
-    this->robot_position = slam_map.getRobotPositionVector();
+void Ekf::init(Eigen::Vector3f robot_position, float left_wheel_count, float right_wheel_count){
+    this->robot_position = robot_position;
+    this->left_wheel_count = left_wheel_count;
+    this->right_wheel_count = right_wheel_count;
 }
 
 // Find a way where the wheel data is coming from and how to get it 
 // (Is it IMU or something else?)
 void Ekf::performOdometry(){
+    Eigen::Vector3f cur_robot_pos = getRobotPosition();
+    float left_wheel_count = getLeftWheelCount();
+    float right_wheel_count = getRightWheelCount();
+
+    // Do calculations with IMU as well?
 
     // after all calculations
     updateRobotPosition();
@@ -37,6 +44,23 @@ void Ekf::updateRobotPosition(){
 // ---------------------------------------------------------------------------------
 // ------------------------------ GETTERS AND SETTERS ------------------------------
 // ---------------------------------------------------------------------------------
+
+void Ekf::setLeftWheelCount(float left_wheel_count){
+    this->left_wheel_count = left_wheel_count;
+}
+
+void Ekf::setRightWheelCount(float right_wheel_count){
+    this->right_wheel_count = right_wheel_count;
+}
+
+float Ekf::getLeftWheelCount(){
+    return this->left_wheel_count;
+}
+
+float Ekf::getRightWheelCount(){
+    return this->right_wheel_count;
+}
+
 void Ekf::setRobotPosition(Eigen::Vector3f robot_position){
     this->robot_position = robot_position;
 }

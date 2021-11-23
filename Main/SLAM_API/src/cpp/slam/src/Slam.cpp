@@ -23,6 +23,11 @@ void Slam::init(){
     this->ekf = EKF::Ekf();
 }
 
+void Slam::initWheelData(float left_wheel_count, float right_wheel_count){
+    setLeftWheelCount(left_wheel_count);
+    setRightWheelCount(right_wheel_count);
+}
+
 void Slam::initGPSData(float x, float y, float z){
     setGPSData(Eigen::Vector3f(x,y,z));
 }
@@ -51,15 +56,15 @@ bool Slam::start(){
     slam_map.setLidarData(getLidarData());
 
     slam_map.init();
-    ekf.init();
+    ekf.init(slam_map.getRobotPositionVector(), getLeftWheelCount(), getRightWheelCount());
     // constructor of a_star
-    slam_map.printMap();
+    // slam_map.printMap();
 
     ekf.performOdometry();
-    slam_map.updateRobotPosition(ekf.getRobotPosition());
+    // slam_map.updateRobotPosition(ekf.getRobotPosition());
 
-    ekf.performLandmarkExtraction();
-    slam_map.updateRobotPosition(ekf.getRobotPosition());
+    // ekf.performLandmarkExtraction();
+    // slam_map.updateRobotPosition(ekf.getRobotPosition());
 
     // Work in progress
     // get and process the odometry data, landmark extraction etc
@@ -87,12 +92,20 @@ Eigen::Vector3f Slam::getGPSData(){
     return this->gps_data;
 }
 
-void Slam::setGyroData(int gyro_data){
-    this->gyro_data = gyro_data;
+void Slam::setLeftWheelCount(float left_wheel_count){
+    this->left_wheel_count = left_wheel_count;
 }
 
-int Slam::getGyroData(){
-    return this->gyro_data;
+void Slam::setRightWheelCount(float right_wheel_count){
+    this->right_wheel_count = right_wheel_count;
+}
+
+float Slam::getLeftWheelCount(){
+    return this->left_wheel_count;
+}
+
+float Slam::getRightWheelCount(){
+    return this->right_wheel_count;
 }
 
 void Slam::setLidarData(Eigen::Matrix3Xf lidar_data){
