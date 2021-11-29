@@ -189,7 +189,7 @@ void collectAndSend() {
 				<< dataToBeSend.gps_pDOP << std::endl
 				<< dataToBeSend.output_Hz << std::endl;
 				printf("end of stream \n");*/
-				sendData(combinedString);
+				sendData(combinedString + "\n");
 			}
 		}
 	}
