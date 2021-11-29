@@ -166,7 +166,7 @@ void collectAndSend() {
 		else {
 			if(fFirstReceivedData == 1) {
 				fFirstReceivedData = 0;
-				printf(combinedString);
+				std::cout << combinedString << std::endl;
 				//putDataInStruct(combinedString, ',', dataToBeSend);
 				//This is only for testig purposes
 				/*std::cout << dataToBeSend.aX << std::endl
