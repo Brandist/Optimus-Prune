@@ -157,6 +157,7 @@ void collectAndSend() {
 	for(int i = 0; i < 1000000000; i++){
 		std::string rawData = readArtemis();
 		char fc = rawData.at(0);
+		std::cout << rawData << std::endl;
 		if (is_number(fc) || is_dash(fc)) {
 			if(fFirstReceivedData != 1) {
 				fFirstReceivedData = 1;
@@ -166,7 +167,7 @@ void collectAndSend() {
 		else {
 			if(fFirstReceivedData == 1) {
 				fFirstReceivedData = 0;
-				std::cout << combinedString << std::endl;
+				//std::cout << combinedString << std::endl;
 				//putDataInStruct(combinedString, ',', dataToBeSend);
 				//This is only for testig purposes
 				/*std::cout << dataToBeSend.aX << std::endl

@@ -227,7 +227,6 @@ void gatherDeviceValues()
     if (temp->online == true)
     {
       char gnssPortNumber[3];
-      sprintf(gnssPortNumber, "%u", temp->portNumber);
       openConnection(temp->muxAddress, temp->portNumber); //Connect to this device through muxes as needed
 
       //Switch on device type to set proper class and setting struct
@@ -261,7 +260,7 @@ void gatherDeviceValues()
           }
           else
             sprintf(tempData, "%s/%s/%s,", gnssDayStr, gnssMonthStr, gnssYearStr);
-          strcat(sensorData, tempData);
+          strcat(outputData, tempData);
         }
         if (nodeSetting->logTime)
         {
@@ -297,60 +296,59 @@ void gatherDeviceValues()
             sprintf(gnssMillisStr, "%d", gnssMillis);
 
           sprintf(tempData, "%s:%s:%s.%s,", gnssHourStr, gnssMinStr, gnssSecStr, gnssMillisStr);
-          strcat(sensorData, tempData);
+          strcat(outputData, tempData);
         }
         if (nodeSetting->logPosition)
         {
           sprintf(tempData, "%d,%d,", nodeDevice->getLatitude(), nodeDevice->getLongitude());
-          strcat(sensorData, tempData);
+          strcat(outputData, tempData);
         }
         if (nodeSetting->logAltitude)
         {
           sprintf(tempData, "%d,", nodeDevice->getAltitude());
-          strcat(sensorData, tempData);
+          strcat(outputData, tempData);
         }
         if (nodeSetting->logAltitudeMSL)
         {
           sprintf(tempData, "%d,", nodeDevice->getAltitudeMSL());
-          strcat(sensorData, tempData);
+          strcat(outputData, tempData);
         }
         if (nodeSetting->logSIV)
         {
           sprintf(tempData, "%d,", nodeDevice->getSIV());
-          strcat(sensorData, tempData);
+          strcat(outputData, tempData);
         }
         if (nodeSetting->logFixType)
         {
           sprintf(tempData, "%d,", nodeDevice->getFixType());
-          strcat(sensorData, tempData);
+          strcat(outputData, tempData);
         }
         if (nodeSetting->logCarrierSolution)
         {
           sprintf(tempData, "%d,", nodeDevice->getCarrierSolutionType());
-          strcat(sensorData, tempData);
+          strcat(outputData, tempData);
         }
         if (nodeSetting->logGroundSpeed)
         {
           sprintf(tempData, "%d,", nodeDevice->getGroundSpeed());
-          strcat(sensorData, tempData);
+          strcat(outputData, tempData);
         }
         if (nodeSetting->logHeadingOfMotion)
         {
           sprintf(tempData, "%d,", nodeDevice->getHeading());
-          strcat(sensorData, tempData);
+          strcat(outputData, tempData);
         }
         if (nodeSetting->logpDOP)
         {
           sprintf(tempData, "%d,", nodeDevice->getPDOP());
-          strcat(sensorData, tempData);
+          strcat(outputData, tempData);
         }
         if (nodeSetting->logiTOW)
         {
           sprintf(tempData, "%d,", nodeDevice->getTimeOfWeek());
-          strcat(sensorData, tempData);
+          strcat(outputData, tempData);
         }
       }
-      SerialPrintln(sensorData);
 
       setQwiicPullups(settings.qwiicBusPullUps); //Re-enable pullups
 
