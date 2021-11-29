@@ -3,6 +3,8 @@
 
 #include <CppLinuxSerial/SerialPort.hpp>
 #include <stdio.h>
+#include <iostream>
+#include <fstream>
 
 struct ArtemisData
 {

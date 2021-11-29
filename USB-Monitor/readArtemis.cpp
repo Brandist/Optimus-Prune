@@ -1,6 +1,7 @@
 #include "readArtemis.hpp"
 
 using namespace mn::CppLinuxSerial;
+using namespace std;
 
 SerialPort serialport("/dev/ttyUSB0", BaudRate::B_115200);
 
@@ -32,7 +33,11 @@ int closeConnection() {
 }
 
 // TODO
-int sendData(struct ArtemisData data) {
+int sendData(std::string data) {
+	ofstream writeFile;
+	writeFile.open("GPSData.txt");
+	writeFile << data;
+	writeFile.close();
 	return 0;
 }
 
@@ -180,7 +185,7 @@ void collectAndSend() {
 				<< dataToBeSend.output_Hz << std::endl;
 				printf("end of stream \n");
 			}
-			//sendData(dataToBeSend);
+			sendData(dataToBeSend);
 		}
 	}
 }
