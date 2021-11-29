@@ -282,6 +282,7 @@ uint64_t lastSDFileNameChangeTime; //Used to calculate the interval since the la
 unsigned long measurementCount = 0; //Used to calc the actual update rate.
 unsigned long measurementTotal = 0; //The total number of recorded measurements. (Doesn't get reset when the menu is opened)
 char outputData[512 * 2]; //Factor of 512 for easier recording to SD in 512 chunks
+char sensorData[512 * 2]; //Factor of 512 for easier recording to SD in 512 chunks
 unsigned long lastReadTime = 0; //Used to delay until user wants to record a new reading
 unsigned long lastDataLogSyncTime = 0; //Used to record to SD every half second
 unsigned int totalCharactersPrinted = 0; //Limit output rate based on baud rate and number of characters to print

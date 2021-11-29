@@ -221,863 +221,138 @@ void gatherDeviceValues()
   node *temp = head;
   while (temp != NULL)
   {
+    sensorData[0] = '\0'; //Clear string contents
+
     //If this node successfully begin()'d
     if (temp->online == true)
     {
+      char gnssPortNumber[3];
+      sprintf(gnssPortNumber, "%u", temp->portNumber);
       openConnection(temp->muxAddress, temp->portNumber); //Connect to this device through muxes as needed
 
       //Switch on device type to set proper class and setting struct
-      switch (temp->deviceType)
+      setQwiicPullups(0); //Disable pullups to minimize CRC issues
+
+      SFE_UBLOX_GNSS *nodeDevice = (SFE_UBLOX_GNSS *)temp->classPtr;
+      struct_uBlox *nodeSetting = (struct_uBlox *)temp->configPtr;
+
+      if (nodeSetting->log == true)
       {
-        case DEVICE_MULTIPLEXER:
+        if (nodeSetting->logDate)
+        {
+          char gnssDayStr[3];
+          char gnssMonthStr[3];
+          char gnssYearStr[5];
+          int gnssDay = nodeDevice->getDay();
+          int gnssMonth = nodeDevice->getMonth();
+          int gnssYear = nodeDevice->getYear();
+          if (gnssDay < 10)
+            sprintf(gnssDayStr, "0%d", gnssDay);
+          else
+            sprintf(gnssDayStr, "%d", gnssDay);
+          if (gnssMonth < 10)
+            sprintf(gnssMonthStr, "0%d", gnssMonth);
+          else
+            sprintf(gnssMonthStr, "%d", gnssMonth);
+          sprintf(gnssYearStr, "%d", gnssYear);
+          if (settings.americanDateStyle == true)
           {
-            //No data to print for a mux
+            sprintf(tempData, "%s/%s/%s,", gnssMonthStr, gnssDayStr, gnssYearStr);
           }
-          break;
-        case DEVICE_LOADCELL_NAU7802:
-          {
-            NAU7802 *nodeDevice = (NAU7802 *)temp->classPtr;
-            struct_NAU7802 *nodeSetting = (struct_NAU7802 *)temp->configPtr; //Create a local pointer that points to same spot as node does
+          else
+            sprintf(tempData, "%s/%s/%s,", gnssDayStr, gnssMonthStr, gnssYearStr);
+          strcat(sensorData, tempData);
+        }
+        if (nodeSetting->logTime)
+        {
+          int adjustedHour = nodeDevice->getHour();
+          if (settings.hour24Style == false)
+            if (adjustedHour > 12) adjustedHour -= 12;
 
-            if (nodeSetting->log == true)
-            {
-              float currentWeight = nodeDevice->getWeight(false, nodeSetting->averageAmount); //Do not allow negative weights, take average of X readings
-              olaftoa(currentWeight, tempData1, nodeSetting->decimalPlaces, sizeof(tempData) / sizeof(char));
-              sprintf(tempData, "%s,", tempData1);
-              strcat(outputData, tempData);
-            }
-          }
-          break;
-        case DEVICE_DISTANCE_VL53L1X:
-          {
-            SFEVL53L1X *nodeDevice = (SFEVL53L1X *)temp->classPtr;
-            struct_VL53L1X *nodeSetting = (struct_VL53L1X *)temp->configPtr;
+          char gnssHourStr[3];
+          char gnssMinStr[3];
+          char gnssSecStr[3];
+          char gnssMillisStr[4];
+          int gnssMin = nodeDevice->getMinute();
+          int gnssSec = nodeDevice->getSecond();
+          int gnssMillis = nodeDevice->getMillisecond();
 
-            if (nodeSetting->log == true)
-            {
-              if (nodeSetting->logDistance)
-              {
-                sprintf(tempData, "%d,", nodeDevice->getDistance());
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->logRangeStatus)
-              {
-                sprintf(tempData, "%d,", nodeDevice->getRangeStatus());
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->logSignalRate)
-              {
-                sprintf(tempData, "%d,", nodeDevice->getSignalRate());
-                strcat(outputData, tempData);
-              }
-            }
-          }
-          break;
-        case DEVICE_GPS_UBLOX:
-          {
-            setQwiicPullups(0); //Disable pullups to minimize CRC issues
+          if (adjustedHour < 10)
+            sprintf(gnssHourStr, "0%d", adjustedHour);
+          else
+            sprintf(gnssHourStr, "%d", adjustedHour);
+          if (gnssMin < 10)
+            sprintf(gnssMinStr, "0%d", gnssMin);
+          else
+            sprintf(gnssMinStr, "%d", gnssMin);
+          if (gnssSec < 10)
+            sprintf(gnssSecStr, "0%d", gnssSec);
+          else
+            sprintf(gnssSecStr, "%d", gnssSec);
+          if (gnssMillis < 10)
+            sprintf(gnssMillisStr, "00%d", gnssMillis);
+          else if (gnssMillis < 100)
+            sprintf(gnssMillisStr, "0%d", gnssMillis);
+          else
+            sprintf(gnssMillisStr, "%d", gnssMillis);
 
-            SFE_UBLOX_GNSS *nodeDevice = (SFE_UBLOX_GNSS *)temp->classPtr;
-            struct_uBlox *nodeSetting = (struct_uBlox *)temp->configPtr;
-
-            if (nodeSetting->log == true)
-            {
-              if (nodeSetting->logDate)
-              {
-                char gnssDayStr[3];
-                char gnssMonthStr[3];
-                char gnssYearStr[5];
-                int gnssDay = nodeDevice->getDay();
-                int gnssMonth = nodeDevice->getMonth();
-                int gnssYear = nodeDevice->getYear();
-                if (gnssDay < 10)
-                  sprintf(gnssDayStr, "0%d", gnssDay);
-                else
-                  sprintf(gnssDayStr, "%d", gnssDay);
-                if (gnssMonth < 10)
-                  sprintf(gnssMonthStr, "0%d", gnssMonth);
-                else
-                  sprintf(gnssMonthStr, "%d", gnssMonth);
-                sprintf(gnssYearStr, "%d", gnssYear);
-                if (settings.americanDateStyle == true)
-                {
-                  sprintf(tempData, "%s/%s/%s,", gnssMonthStr, gnssDayStr, gnssYearStr);
-                }
-                else
-                  sprintf(tempData, "%s/%s/%s,", gnssDayStr, gnssMonthStr, gnssYearStr);
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->logTime)
-              {
-                int adjustedHour = nodeDevice->getHour();
-                if (settings.hour24Style == false)
-                  if (adjustedHour > 12) adjustedHour -= 12;
-
-                char gnssHourStr[3];
-                char gnssMinStr[3];
-                char gnssSecStr[3];
-                char gnssMillisStr[4];
-                int gnssMin = nodeDevice->getMinute();
-                int gnssSec = nodeDevice->getSecond();
-                int gnssMillis = nodeDevice->getMillisecond();
-
-                if (adjustedHour < 10)
-                  sprintf(gnssHourStr, "0%d", adjustedHour);
-                else
-                  sprintf(gnssHourStr, "%d", adjustedHour);
-                if (gnssMin < 10)
-                  sprintf(gnssMinStr, "0%d", gnssMin);
-                else
-                  sprintf(gnssMinStr, "%d", gnssMin);
-                if (gnssSec < 10)
-                  sprintf(gnssSecStr, "0%d", gnssSec);
-                else
-                  sprintf(gnssSecStr, "%d", gnssSec);
-                if (gnssMillis < 10)
-                  sprintf(gnssMillisStr, "00%d", gnssMillis);
-                else if (gnssMillis < 100)
-                  sprintf(gnssMillisStr, "0%d", gnssMillis);
-                else
-                  sprintf(gnssMillisStr, "%d", gnssMillis);
-
-                sprintf(tempData, "%s:%s:%s.%s,", gnssHourStr, gnssMinStr, gnssSecStr, gnssMillisStr);
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->logPosition)
-              {
-                sprintf(tempData, "%d,%d,", nodeDevice->getLatitude(), nodeDevice->getLongitude());
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->logAltitude)
-              {
-                sprintf(tempData, "%d,", nodeDevice->getAltitude());
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->logAltitudeMSL)
-              {
-                sprintf(tempData, "%d,", nodeDevice->getAltitudeMSL());
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->logSIV)
-              {
-                sprintf(tempData, "%d,", nodeDevice->getSIV());
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->logFixType)
-              {
-                sprintf(tempData, "%d,", nodeDevice->getFixType());
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->logCarrierSolution)
-              {
-                sprintf(tempData, "%d,", nodeDevice->getCarrierSolutionType());
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->logGroundSpeed)
-              {
-                sprintf(tempData, "%d,", nodeDevice->getGroundSpeed());
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->logHeadingOfMotion)
-              {
-                sprintf(tempData, "%d,", nodeDevice->getHeading());
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->logpDOP)
-              {
-                sprintf(tempData, "%d,", nodeDevice->getPDOP());
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->logiTOW)
-              {
-                sprintf(tempData, "%d,", nodeDevice->getTimeOfWeek());
-                strcat(outputData, tempData);
-              }
-            }
-
-            setQwiicPullups(settings.qwiicBusPullUps); //Re-enable pullups
-          }
-          break;
-        case DEVICE_PROXIMITY_VCNL4040:
-          {
-            VCNL4040 *nodeDevice = (VCNL4040 *)temp->classPtr;
-            struct_VCNL4040 *nodeSetting = (struct_VCNL4040 *)temp->configPtr;
-
-            //Get ambient takes 80ms minimum and may not play properly with power cycling
-            if (nodeSetting->log == true)
-            {
-              if (nodeSetting->logProximity)
-              {
-                sprintf(tempData, "%d,", nodeDevice->getProximity());
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->logAmbientLight)
-              {
-                sprintf(tempData, "%d,", nodeDevice->getAmbient());
-                strcat(outputData, tempData);
-              }
-            }
-          }
-          break;
-        case DEVICE_TEMPERATURE_TMP117:
-          {
-            TMP117 *nodeDevice = (TMP117 *)temp->classPtr;
-            struct_TMP117 *nodeSetting = (struct_TMP117 *)temp->configPtr;
-
-            if (nodeSetting->log == true)
-            {
-              if (nodeSetting->logTemperature)
-              {
-                olaftoa(nodeDevice->readTempC(), tempData1, 4, sizeof(tempData) / sizeof(char)); //Resolution to 0.0078°C, accuracy of 0.1°C
-                sprintf(tempData, "%s,", tempData1);
-                strcat(outputData, tempData);
-              }
-            }
-          }
-          break;
-        case DEVICE_PRESSURE_MS5637:
-          {
-            MS5637 *nodeDevice = (MS5637 *)temp->classPtr;
-            struct_MS5637 *nodeSetting = (struct_MS5637 *)temp->configPtr;
-
-            if (nodeSetting->log == true)
-            {
-              if (nodeSetting->logPressure)
-              {
-                olaftoa(nodeDevice->getPressure(), tempData1, 2, sizeof(tempData) / sizeof(char));
-                sprintf(tempData, "%s,", tempData1);
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->logTemperature)
-              {
-                olaftoa(nodeDevice->getTemperature(), tempData1, 2, sizeof(tempData) / sizeof(char));
-                sprintf(tempData, "%s,", tempData1);
-                strcat(outputData, tempData);
-              }
-            }
-          }
-          break;
-        case DEVICE_PRESSURE_LPS25HB:
-          {
-            LPS25HB *nodeDevice = (LPS25HB *)temp->classPtr;
-            struct_LPS25HB *nodeSetting = (struct_LPS25HB *)temp->configPtr;
-            if (nodeSetting->log == true)
-            {
-              if (nodeSetting->logPressure)
-              {
-                olaftoa(nodeDevice->getPressure_hPa(), tempData1, 2, sizeof(tempData) / sizeof(char));
-                sprintf(tempData, "%s,", tempData1);
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->logTemperature)
-              {
-                olaftoa(nodeDevice->getTemperature_degC(), tempData1, 2, sizeof(tempData) / sizeof(char));
-                sprintf(tempData, "%s,", tempData1);
-                strcat(outputData, tempData);
-              }
-            }
-          }
-          break;
-        case DEVICE_PHT_BME280:
-          {
-            BME280 *nodeDevice = (BME280 *)temp->classPtr;
-            struct_BME280 *nodeSetting = (struct_BME280 *)temp->configPtr;
-            if (nodeSetting->log == true)
-            {
-              if (nodeSetting->logPressure)
-              {
-                olaftoa(nodeDevice->readFloatPressure(), tempData1, 2, sizeof(tempData) / sizeof(char));
-                sprintf(tempData, "%s,", tempData1);
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->logHumidity)
-              {
-                olaftoa(nodeDevice->readFloatHumidity(), tempData1, 2, sizeof(tempData) / sizeof(char));
-                sprintf(tempData, "%s,", tempData1);
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->logAltitude)
-              {
-                olaftoa(nodeDevice->readFloatAltitudeMeters(), tempData1, 2, sizeof(tempData) / sizeof(char));
-                sprintf(tempData, "%s,", tempData1);
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->logTemperature)
-              {
-                olaftoa(nodeDevice->readTempC(), tempData1, 2, sizeof(tempData) / sizeof(char));
-                sprintf(tempData, "%s,", tempData1);
-                strcat(outputData, tempData);
-              }
-            }
-          }
-          break;
-        case DEVICE_UV_VEML6075:
-          {
-            VEML6075 *nodeDevice = (VEML6075 *)temp->classPtr;
-            struct_VEML6075 *nodeSetting = (struct_VEML6075 *)temp->configPtr;
-            if (nodeSetting->log == true)
-            {
-              if (nodeSetting->logUVA)
-              {
-                olaftoa(nodeDevice->uva(), tempData1, 2, sizeof(tempData) / sizeof(char));
-                sprintf(tempData, "%s,", tempData1);
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->logUVB)
-              {
-                olaftoa(nodeDevice->uvb(), tempData1, 2, sizeof(tempData) / sizeof(char));
-                sprintf(tempData, "%s,", tempData1);
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->logUVIndex)
-              {
-                olaftoa(nodeDevice->index(), tempData1, 2, sizeof(tempData) / sizeof(char));
-                sprintf(tempData, "%s,", tempData1);
-                strcat(outputData, tempData);
-              }
-            }
-          }
-          break;
-
-        case DEVICE_VOC_CCS811:
-          {
-            CCS811 *nodeDevice = (CCS811 *)temp->classPtr;
-            struct_CCS811 *nodeSetting = (struct_CCS811 *)temp->configPtr;
-            if (nodeSetting->log == true)
-            {
-              nodeDevice->readAlgorithmResults();
-              if (nodeSetting->logTVOC)
-              {
-                sprintf(tempData, "%d,", nodeDevice->getTVOC());
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->logCO2)
-              {
-                sprintf(tempData, "%d,", nodeDevice->getCO2());
-                strcat(outputData, tempData);
-              }
-            }
-          }
-          break;
-        case DEVICE_VOC_SGP30:
-          {
-            SGP30 *nodeDevice = (SGP30 *)temp->classPtr;
-            struct_SGP30 *nodeSetting = (struct_SGP30 *)temp->configPtr;
-            if (nodeSetting->log == true)
-            {
-              nodeDevice->measureAirQuality();
-              nodeDevice->measureRawSignals(); //To get H2 and Ethanol
-
-              if (nodeSetting->logTVOC)
-              {
-                sprintf(tempData, "%d,", nodeDevice->TVOC);
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->logCO2)
-              {
-                sprintf(tempData, "%d,", nodeDevice->CO2);
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->logH2)
-              {
-                sprintf(tempData, "%d,", nodeDevice->H2);
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->logEthanol)
-              {
-                sprintf(tempData, "%d,", nodeDevice->ethanol);
-                strcat(outputData, tempData);
-              }
-            }
-          }
-          break;
-        case DEVICE_CO2_SCD30:
-          {
-            SCD30 *nodeDevice = (SCD30 *)temp->classPtr;
-            struct_SCD30 *nodeSetting = (struct_SCD30 *)temp->configPtr;
-            if (nodeSetting->log == true)
-            {
-              if (nodeSetting->logCO2)
-              {
-                sprintf(tempData, "%d,", nodeDevice->getCO2());
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->logHumidity)
-              {
-                olaftoa(nodeDevice->getHumidity(), tempData1, 2, sizeof(tempData) / sizeof(char));
-                sprintf(tempData, "%s,", tempData1);
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->logTemperature)
-              {
-                olaftoa(nodeDevice->getTemperature(), tempData1, 2, sizeof(tempData) / sizeof(char));
-                sprintf(tempData, "%s,", tempData1);
-                strcat(outputData, tempData);
-              }
-            }
-          }
-          break;
-        case DEVICE_PHT_MS8607:
-          {
-            MS8607 *nodeDevice = (MS8607 *)temp->classPtr;
-            struct_MS8607 *nodeSetting = (struct_MS8607 *)temp->configPtr;
-            if (nodeSetting->log == true)
-            {
-              if (nodeSetting->logHumidity)
-              {
-                olaftoa(nodeDevice->getHumidity(), tempData1, 2, sizeof(tempData) / sizeof(char));
-                sprintf(tempData, "%s,", tempData1);
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->logPressure)
-              {
-                olaftoa(nodeDevice->getPressure(), tempData1, 2, sizeof(tempData) / sizeof(char));
-                sprintf(tempData, "%s,", tempData1);
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->logTemperature)
-              {
-                olaftoa(nodeDevice->getTemperature(), tempData1, 2, sizeof(tempData) / sizeof(char));
-                sprintf(tempData, "%s,", tempData1);
-                strcat(outputData, tempData);
-              }
-            }
-          }
-          break;
-        case DEVICE_TEMPERATURE_MCP9600:
-          {
-            MCP9600 *nodeDevice = (MCP9600 *)temp->classPtr;
-            struct_MCP9600 *nodeSetting = (struct_MCP9600 *)temp->configPtr;
-            if (nodeSetting->log == true)
-            {
-              if (nodeSetting->logTemperature)
-              {
-                olaftoa(nodeDevice->getThermocoupleTemp(), tempData1, 2, sizeof(tempData) / sizeof(char));
-                sprintf(tempData, "%s,", tempData1);
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->logAmbientTemperature)
-              {
-                olaftoa(nodeDevice->getAmbientTemp(), tempData1, 2, sizeof(tempData) / sizeof(char));
-                sprintf(tempData, "%s,", tempData1);
-                strcat(outputData, tempData);
-              }
-            }
-          }
-          break;
-        case DEVICE_HUMIDITY_AHT20:
-          {
-            AHT20 *nodeDevice = (AHT20 *)temp->classPtr;
-            struct_AHT20 *nodeSetting = (struct_AHT20 *)temp->configPtr;
-            if (nodeSetting->log == true)
-            {
-              if (nodeSetting->logHumidity)
-              {
-                olaftoa(nodeDevice->getHumidity(), tempData1, 2, sizeof(tempData) / sizeof(char));
-                sprintf(tempData, "%s,", tempData1);
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->logTemperature)
-              {
-                olaftoa(nodeDevice->getTemperature(), tempData1, 2, sizeof(tempData) / sizeof(char));
-                sprintf(tempData, "%s,", tempData1);
-                strcat(outputData, tempData);
-              }
-            }
-          }
-          break;
-        case DEVICE_HUMIDITY_SHTC3:
-          {
-            SHTC3 *nodeDevice = (SHTC3 *)temp->classPtr;
-            struct_SHTC3 *nodeSetting = (struct_SHTC3 *)temp->configPtr;
-            if (nodeSetting->log == true)
-            {
-              nodeDevice->update();
-              if (nodeSetting->logHumidity)
-              {
-                olaftoa(nodeDevice->toPercent(), tempData1, 2, sizeof(tempData) / sizeof(char));
-                sprintf(tempData, "%s,", tempData1);
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->logTemperature)
-              {
-                olaftoa(nodeDevice->toDegC(), tempData1, 2, sizeof(tempData) / sizeof(char));
-                sprintf(tempData, "%s,", tempData1);
-                strcat(outputData, tempData);
-              }
-            }
-          }
-          break;
-        case DEVICE_ADC_ADS122C04:
-          {
-            SFE_ADS122C04 *nodeDevice = (SFE_ADS122C04 *)temp->classPtr;
-            struct_ADS122C04 *nodeSetting = (struct_ADS122C04 *)temp->configPtr;
-            if (nodeSetting->log == true)
-            {
-              // The ADS122C04 supports sampling up to 2kHz but the library functions default to 20Hz.
-              // To be able to log faster than 20Hz we need to use setDataRate to change the data rate (sample speed).
-              // Note: readInternalTemperature and readRawVoltage are hard wired to 20Hz in the library and
-              //       - at the moment - there's nothing we can do about that! If you want to log faster than
-              //       20Hz, you'll need to disable readInternalTemperature and readRawVoltage.
-              // At the time of writing, the maximum achieveable sample rate is ~156Hz.
-
-              //It looks like configureDevice will take care of this. No need to do it here.
-              //if (nodeSetting->useFourWireMode)
-              //  nodeDevice->configureADCmode(ADS122C04_4WIRE_MODE);
-              //else if (nodeSetting->useThreeWireMode)
-              //  nodeDevice->configureADCmode(ADS122C04_3WIRE_MODE);
-              //else if (nodeSetting->useTwoWireMode)
-              //  nodeDevice->configureADCmode(ADS122C04_2WIRE_MODE);
-              //else if (nodeSetting->useFourWireHighTemperatureMode)
-              //  nodeDevice->configureADCmode(ADS122C04_4WIRE_HI_TEMP);
-              //else if (nodeSetting->useThreeWireHighTemperatureMode)
-              //  nodeDevice->configureADCmode(ADS122C04_3WIRE_HI_TEMP);
-              //else if (nodeSetting->useTwoWireHighTemperatureMode)
-              //  nodeDevice->configureADCmode(ADS122C04_2WIRE_HI_TEMP);
-
-              if (settings.usBetweenReadings < 50000ULL) // Check if we are trying to sample quicker than 20Hz
-              {
-                if (settings.usBetweenReadings <= 1000ULL) // Check if we are trying to sample at 1kHz
-                  nodeDevice->setDataRate(ADS122C04_DATA_RATE_1000SPS);
-                else if (settings.usBetweenReadings <= 1667ULL) // Check if we are trying to sample at 600Hz
-                  nodeDevice->setDataRate(ADS122C04_DATA_RATE_600SPS);
-                else if (settings.usBetweenReadings <= 3031ULL) // Check if we are trying to sample at 330Hz
-                  nodeDevice->setDataRate(ADS122C04_DATA_RATE_330SPS);
-                else if (settings.usBetweenReadings <= 5715ULL) // Check if we are trying to sample at 175Hz
-                  nodeDevice->setDataRate(ADS122C04_DATA_RATE_175SPS);
-                else if (settings.usBetweenReadings <= 11112ULL) // Check if we are trying to sample at 90Hz
-                  nodeDevice->setDataRate(ADS122C04_DATA_RATE_90SPS);
-                else if (settings.usBetweenReadings <= 22223ULL) // Check if we are trying to sample at 45Hz
-                  nodeDevice->setDataRate(ADS122C04_DATA_RATE_45SPS);
-              }
-              else
-                nodeDevice->setDataRate(ADS122C04_DATA_RATE_20SPS); // Default to 20Hz
-
-              if (nodeSetting->logCentigrade)
-              {
-                olaftoa(nodeDevice->readPT100Centigrade(), tempData1, 3, sizeof(tempData) / sizeof(char));
-                sprintf(tempData, "%s,", tempData1);
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->logFahrenheit)
-              {
-                olaftoa(nodeDevice->readPT100Fahrenheit(), tempData1, 3, sizeof(tempData) / sizeof(char));
-                sprintf(tempData, "%s,", tempData1);
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->logInternalTemperature)
-              {
-                olaftoa(nodeDevice->readInternalTemperature(), tempData1, 3, sizeof(tempData) / sizeof(char));
-                sprintf(tempData, "%s,", tempData1);
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->logRawVoltage)
-              {
-                sprintf(tempData, "%d,", nodeDevice->readRawVoltage());
-                strcat(outputData, tempData);
-              }
-            }
-          }
-          break;
-        case DEVICE_PRESSURE_MPR0025PA1:
-          {
-            SparkFun_MicroPressure *nodeDevice = (SparkFun_MicroPressure *)temp->classPtr;
-            struct_MPR0025PA1 *nodeSetting = (struct_MPR0025PA1 *)temp->configPtr;
-            if (nodeSetting->log == true)
-            {
-              if (nodeSetting->usePSI)
-              {
-                olaftoa(nodeDevice->readPressure(), tempData1, 4, sizeof(tempData) / sizeof(char));
-                sprintf(tempData, "%s,", tempData1);
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->usePA)
-              {
-                olaftoa(nodeDevice->readPressure(PA), tempData1, 1, sizeof(tempData) / sizeof(char));
-                sprintf(tempData, "%s,", tempData1);
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->useKPA)
-              {
-                olaftoa(nodeDevice->readPressure(KPA), tempData1, 4, sizeof(tempData) / sizeof(char));
-                sprintf(tempData, "%s,", tempData1);
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->useTORR)
-              {
-                olaftoa(nodeDevice->readPressure(TORR), tempData1, 3, sizeof(tempData) / sizeof(char));
-                sprintf(tempData, "%s,", tempData1);
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->useINHG)
-              {
-                olaftoa(nodeDevice->readPressure(INHG), tempData1, 4, sizeof(tempData) / sizeof(char));
-                sprintf(tempData, "%s,", tempData1);
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->useATM)
-              {
-                olaftoa(nodeDevice->readPressure(ATM), tempData1, 6, sizeof(tempData) / sizeof(char));
-                sprintf(tempData, "%s,", tempData1);
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->useBAR)
-              {
-                olaftoa(nodeDevice->readPressure(BAR), tempData1, 6, sizeof(tempData) / sizeof(char));
-                sprintf(tempData, "%s,", tempData1);
-                strcat(outputData, tempData);
-              }
-            }
-          }
-          break;
-        case DEVICE_PARTICLE_SNGCJA5:
-          {
-            SFE_PARTICLE_SENSOR *nodeDevice = (SFE_PARTICLE_SENSOR *)temp->classPtr;
-            struct_SNGCJA5 *nodeSetting = (struct_SNGCJA5 *)temp->configPtr;
-            if (nodeSetting->log == true)
-            {
-              if (nodeSetting->logPM1)
-              {
-                olaftoa(nodeDevice->getPM1_0(), tempData1, 2, sizeof(tempData) / sizeof(char));
-                sprintf(tempData, "%s,", tempData1);
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->logPM25)
-              {
-                olaftoa(nodeDevice->getPM2_5(), tempData1, 2, sizeof(tempData) / sizeof(char));
-                sprintf(tempData, "%s,", tempData1);
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->logPM10)
-              {
-                olaftoa(nodeDevice->getPM10(), tempData1, 2, sizeof(tempData) / sizeof(char));
-                sprintf(tempData, "%s,", tempData1);
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->logPC05)
-              {
-                sprintf(tempData, "%d,", nodeDevice->getPC0_5());
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->logPC1)
-              {
-                sprintf(tempData, "%d,", nodeDevice->getPC1_0());
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->logPC25)
-              {
-                sprintf(tempData, "%d,", nodeDevice->getPC2_5());
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->logPC50)
-              {
-                sprintf(tempData, "%d,", nodeDevice->getPC5_0());
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->logPC75)
-              {
-                sprintf(tempData, "%d,", nodeDevice->getPC7_5());
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->logPC10)
-              {
-                sprintf(tempData, "%d,", nodeDevice->getPC10());
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->logSensorStatus)
-              {
-                sprintf(tempData, "%d,", nodeDevice->getStatusSensors());
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->logPDStatus)
-              {
-                sprintf(tempData, "%d,", nodeDevice->getStatusPD());
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->logLDStatus)
-              {
-                sprintf(tempData, "%d,", nodeDevice->getStatusLD());
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->logFanStatus)
-              {
-                sprintf(tempData, "%d,", nodeDevice->getStatusFan());
-                strcat(outputData, tempData);
-              }
-            }
-          }
-          break;
-        case DEVICE_VOC_SGP40:
-          {
-            SGP40 *nodeDevice = (SGP40 *)temp->classPtr;
-            struct_SGP40 *nodeSetting = (struct_SGP40 *)temp->configPtr;
-            if (nodeSetting->log == true)
-            {
-              if (nodeSetting->logVOC)
-              {
-                sprintf(tempData, "%d,", nodeDevice->getVOCindex(nodeSetting->RH, nodeSetting->T));
-                strcat(outputData, tempData);
-              }
-            }
-          }
-          break;
-        case DEVICE_PRESSURE_SDP3X:
-          {
-            SDP3X *nodeDevice = (SDP3X *)temp->classPtr;
-            struct_SDP3X *nodeSetting = (struct_SDP3X *)temp->configPtr;
-            if (nodeSetting->log == true)
-            {
-              float pressure;
-              float temperature;
-              if ((nodeSetting->logPressure) || (nodeSetting->logTemperature))
-              {
-                // Each triggered measurement takes 45ms to complete so we need to use continuous measurements
-                nodeDevice->readMeasurement(&pressure, &temperature); // Read the latest measurement
-              }
-              if (nodeSetting->logPressure)
-              {
-                olaftoa(pressure, tempData1, 2, sizeof(tempData) / sizeof(char));
-                sprintf(tempData, "%s,", tempData1);
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->logTemperature)
-              {
-                olaftoa(temperature, tempData1, 2, sizeof(tempData) / sizeof(char));
-                sprintf(tempData, "%s,", tempData1);
-                strcat(outputData, tempData);
-              }
-            }
-          }
-          break;
-        case DEVICE_PRESSURE_MS5837:
-          {
-            MS5837 *nodeDevice = (MS5837 *)temp->classPtr;
-            struct_MS5837 *nodeSetting = (struct_MS5837 *)temp->configPtr;
-            if (nodeSetting->log == true)
-            {
-              if ((nodeSetting->logPressure) || (nodeSetting->logTemperature) || (nodeSetting->logDepth) || (nodeSetting->logAltitude))
-              {
-                nodeDevice->read();
-              }
-              if (nodeSetting->logPressure)
-              {
-                olaftoa(nodeDevice->pressure(nodeSetting->conversion), tempData1, 2, sizeof(tempData) / sizeof(char));
-                sprintf(tempData, "%s,", tempData1);
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->logTemperature)
-              {
-                olaftoa(nodeDevice->temperature(), tempData1, 2, sizeof(tempData) / sizeof(char));
-                sprintf(tempData, "%s,", tempData1);
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->logDepth)
-              {
-                olaftoa(nodeDevice->depth(), tempData1, 3, sizeof(tempData) / sizeof(char));
-                sprintf(tempData, "%s,", tempData1);
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->logAltitude)
-              {
-                olaftoa(nodeDevice->altitude(), tempData1, 2, sizeof(tempData) / sizeof(char));
-                sprintf(tempData, "%s,", tempData1);
-                strcat(outputData, tempData);
-              }
-            }
-          }
-          break;
-        case DEVICE_QWIIC_BUTTON:
-          {
-            QwiicButton *nodeDevice = (QwiicButton *)temp->classPtr;
-            struct_QWIIC_BUTTON *nodeSetting = (struct_QWIIC_BUTTON *)temp->configPtr;
-            if (nodeSetting->log == true)
-            {
-              long pressedPopped = 0;
-              while (nodeDevice->isPressedQueueEmpty() == false)
-              {
-                pressedPopped = nodeDevice->popPressedQueue();
-              }
-              if (nodeSetting->logPressed)
-              {
-                olaftoa(((float)pressedPopped) / 1000.0, tempData1, 3, sizeof(tempData) / sizeof(char));
-                sprintf(tempData, "%s,", tempData1);
-                strcat(outputData, tempData);
-              }
-
-              long clickedPopped = 0;
-              while (nodeDevice->isClickedQueueEmpty() == false)
-              {
-                clickedPopped = nodeDevice->popClickedQueue();
-                nodeSetting->ledState ^= 1; // Toggle nodeSetting->ledState on _every_ click (not just the most recent)
-              }
-              if (nodeSetting->logClicked)
-              {
-                olaftoa(((float)clickedPopped) / 1000.0, tempData1, 3, sizeof(tempData) / sizeof(char));
-                sprintf(tempData, "%s,", tempData1);
-                strcat(outputData, tempData);
-              }
-
-              if (nodeSetting->toggleLEDOnClick)
-              {
-                if (nodeSetting->ledState)
-                  nodeDevice->LEDon(nodeSetting->ledBrightness);
-                else
-                  nodeDevice->LEDoff();
-                sprintf(tempData, "%d,", nodeSetting->ledState);
-                strcat(outputData, tempData);
-              }
-            }
-          }
-          break;
-        case DEVICE_BIO_SENSOR_HUB:
-          {
-            SparkFun_Bio_Sensor_Hub *nodeDevice = (SparkFun_Bio_Sensor_Hub *)temp->classPtr;
-            struct_BIO_SENSOR_HUB *nodeSetting = (struct_BIO_SENSOR_HUB *)temp->configPtr;
-            if (nodeSetting->log == true)
-            {
-              bioData body;
-              if ((nodeSetting->logHeartrate) || (nodeSetting->logConfidence) || (nodeSetting->logOxygen) || (nodeSetting->logStatus) || (nodeSetting->logExtendedStatus) || (nodeSetting->logRValue))
-              {
-                body = nodeDevice->readBpm();
-              }
-              if (nodeSetting->logHeartrate)
-              {
-                sprintf(tempData, "%d,", body.heartRate);
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->logConfidence)
-              {
-                sprintf(tempData, "%d,", body.confidence);
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->logOxygen)
-              {
-                sprintf(tempData, "%d,", body.oxygen);
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->logStatus)
-              {
-                sprintf(tempData, "%d,", body.status);
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->logExtendedStatus)
-              {
-                sprintf(tempData, "%d,", body.extStatus);
-                strcat(outputData, tempData);
-              }
-              if (nodeSetting->logRValue)
-              {
-                olaftoa(body.rValue, tempData1, 1, sizeof(tempData) / sizeof(char));
-                sprintf(tempData, "%s,", tempData1);
-                strcat(outputData, tempData);
-              }
-            }
-          }
-          break;
-        default:
-          SerialPrintf2("printDeviceValue unknown device type: %s\r\n", getDeviceName(temp->deviceType));
-          break;
+          sprintf(tempData, "%s:%s:%s.%s,", gnssHourStr, gnssMinStr, gnssSecStr, gnssMillisStr);
+          strcat(sensorData, tempData);
+        }
+        if (nodeSetting->logPosition)
+        {
+          sprintf(tempData, "%d,%d,", nodeDevice->getLatitude(), nodeDevice->getLongitude());
+          strcat(sensorData, tempData);
+        }
+        if (nodeSetting->logAltitude)
+        {
+          sprintf(tempData, "%d,", nodeDevice->getAltitude());
+          strcat(sensorData, tempData);
+        }
+        if (nodeSetting->logAltitudeMSL)
+        {
+          sprintf(tempData, "%d,", nodeDevice->getAltitudeMSL());
+          strcat(sensorData, tempData);
+        }
+        if (nodeSetting->logSIV)
+        {
+          sprintf(tempData, "%d,", nodeDevice->getSIV());
+          strcat(sensorData, tempData);
+        }
+        if (nodeSetting->logFixType)
+        {
+          sprintf(tempData, "%d,", nodeDevice->getFixType());
+          strcat(sensorData, tempData);
+        }
+        if (nodeSetting->logCarrierSolution)
+        {
+          sprintf(tempData, "%d,", nodeDevice->getCarrierSolutionType());
+          strcat(sensorData, tempData);
+        }
+        if (nodeSetting->logGroundSpeed)
+        {
+          sprintf(tempData, "%d,", nodeDevice->getGroundSpeed());
+          strcat(sensorData, tempData);
+        }
+        if (nodeSetting->logHeadingOfMotion)
+        {
+          sprintf(tempData, "%d,", nodeDevice->getHeading());
+          strcat(sensorData, tempData);
+        }
+        if (nodeSetting->logpDOP)
+        {
+          sprintf(tempData, "%d,", nodeDevice->getPDOP());
+          strcat(sensorData, tempData);
+        }
+        if (nodeSetting->logiTOW)
+        {
+          sprintf(tempData, "%d,", nodeDevice->getTimeOfWeek());
+          strcat(sensorData, tempData);
+        }
       }
+      SerialPrintln(sensorData);
+
+      setQwiicPullups(settings.qwiicBusPullUps); //Re-enable pullups
 
     }
     temp = temp->next;
