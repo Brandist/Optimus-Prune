@@ -73,6 +73,7 @@ void putDataInStruct(std::string &iString, char delim, struct ArtemisData &data)
 
 // Fill up 1 item in the struct
 void putItemInStruct(struct ArtemisData &data, int index, std::string &iString) {
+	try{
 	switch (index)
 	{
 	case 0:
@@ -143,6 +144,10 @@ void putItemInStruct(struct ArtemisData &data, int index, std::string &iString) 
 	default:
 		break;
 	}
+	}
+	catch(exception e){
+
+	}
 }
 
 void collectAndSend() {
@@ -161,9 +166,9 @@ void collectAndSend() {
 		else {
 			if(fFirstReceivedData == 1) {
 				fFirstReceivedData = 0;
-				putDataInStruct(combinedString, ',', dataToBeSend);
+				//putDataInStruct(combinedString, ',', dataToBeSend);
 				//This is only for testig purposes
-				std::cout << dataToBeSend.aX << std::endl
+				/*std::cout << dataToBeSend.aX << std::endl
 				<< dataToBeSend.aY << std::endl
 				<< dataToBeSend.aZ << std::endl
 				<< dataToBeSend.gX << std::endl
@@ -183,9 +188,9 @@ void collectAndSend() {
 				<< dataToBeSend.gps_heading << std::endl
 				<< dataToBeSend.gps_pDOP << std::endl
 				<< dataToBeSend.output_Hz << std::endl;
-				printf("end of stream \n");
+				printf("end of stream \n");*/
+				sendData(combinedString);
 			}
-			sendData(combinedString);
 		}
 	}
 }
