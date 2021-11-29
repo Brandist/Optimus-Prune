@@ -185,7 +185,7 @@ void collectAndSend() {
 				<< dataToBeSend.output_Hz << std::endl;
 				printf("end of stream \n");
 			}
-			sendData(dataToBeSend);
+			sendData(combinedString);
 		}
 	}
 }
