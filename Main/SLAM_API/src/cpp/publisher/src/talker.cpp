@@ -1,21 +1,17 @@
 #include <iostream>
 #include "apilib/Icontrollers/IGPSController.h"
 #include "apilib/Icontrollers/ILidarController.h"
-#include "apilib/Icontrollers/IWheelController.h"
 #include "ros/ros.h"
 #include "std_msgs/String.h"
 #include "publisher/lidar.h"
 #include "publisher/gps.h"
-#include "publisher/wheel.h"
 #include <Eigen/Core>
 
 using namespace std;
 
-
 int main(int argc, char **argv) {
     controllers::GPSController gps_cont;
     controllers::LidarController lidar_cont;
-    controllers::WheelController wheel_cont;
 
     ros::init(argc, argv, "talker");
     ros::NodeHandle n;
@@ -23,18 +19,16 @@ int main(int argc, char **argv) {
     // TODO: add second topic for the GPS, which separate msg
     ros::Publisher gps_data = n.advertise<publisher::gps>("gps_topic", 1000);
     ros::Publisher lidar_data = n.advertise<publisher::lidar>("lidar_topic", 1000);
-    ros::Publisher wheel_data = n.advertise<publisher::wheel>("wheel_topic", 1000);
 
     ros::Rate loop_rate(10);
 
     int count=0;
     publisher::gps msg_gps;
     publisher::lidar msg_lidar;
-    publisher::wheel msg_wheel;
+    
     while(ros::ok()){
         std::vector<float> g_data = gps_cont.requestData();
         Eigen::Matrix3Xf l_data = lidar_cont.requestData();
-        int w_data = wheel_cont.requestData();
 
         std::vector<float> x_a, y_a, z_a;
 
@@ -52,13 +46,9 @@ int main(int argc, char **argv) {
         msg_gps.aY = g_data.at(1);
         msg_gps.aZ = g_data.at(2);
 
-        msg_wheel.left_count = count*2;
-        msg_wheel.right_count = count*3;
-
         // ROS_INFO("%f ", msg.x[0]);
         lidar_data.publish(msg_lidar);
         gps_data.publish(msg_gps);
-        wheel_data.publish(msg_wheel);
         ros::spinOnce();
 
         loop_rate.sleep();

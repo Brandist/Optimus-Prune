@@ -23,11 +23,6 @@ void Slam::init(){
     this->ekf = EKF::Ekf();
 }
 
-void Slam::initWheelData(float left_wheel_count, float right_wheel_count){
-    setLeftWheelCount(left_wheel_count);
-    setRightWheelCount(right_wheel_count);
-}
-
 void Slam::initGPSData(float x, float y, float z){
     setGPSData(Eigen::Vector3f(x,y,z));
 }
@@ -56,7 +51,7 @@ bool Slam::start(){
     slam_map.setLidarData(getLidarData());
 
     slam_map.init();
-    ekf.init(slam_map.getRobotPositionVector(), getLeftWheelCount(), getRightWheelCount());
+    ekf.init(slam_map.getRobotPositionVector());
     // constructor of a_star
     // slam_map.printMap();
 
@@ -92,22 +87,6 @@ void Slam::setGPSData(Eigen::Vector3f gps_data){
 
 Eigen::Vector3f Slam::getGPSData(){
     return this->gps_data;
-}
-
-void Slam::setLeftWheelCount(float left_wheel_count){
-    this->left_wheel_count = left_wheel_count;
-}
-
-void Slam::setRightWheelCount(float right_wheel_count){
-    this->right_wheel_count = right_wheel_count;
-}
-
-float Slam::getLeftWheelCount(){
-    return this->left_wheel_count;
-}
-
-float Slam::getRightWheelCount(){
-    return this->right_wheel_count;
 }
 
 void Slam::setLidarData(Eigen::Matrix3Xf lidar_data){

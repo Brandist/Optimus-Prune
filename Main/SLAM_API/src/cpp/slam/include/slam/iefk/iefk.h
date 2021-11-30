@@ -12,19 +12,13 @@ namespace EKF{
         private:
             map::Map slam_map;
             Eigen::Vector3f robot_position;
-            float left_wheel_tick;
-            float right_wheel_tick;
             void setRobotPosition(Eigen::Vector3f robot_position);
-            void setLeftWheelTick(float left_wheel_tick);
-            void setRightWheelTick(float right_wheel_tick);
         public:
             Ekf();
-            void init(Eigen::Vector3f robot_position, float left_wheel_tick, float right_wheel_tick);
+            void init(Eigen::Vector3f robot_position);
             void performOdometry();
             void performLandmarkExtraction();
             Eigen::Vector3f getRobotPosition();
-            float getLeftWheelTick();
-            float getRightWheelTick();
     };
 }
 

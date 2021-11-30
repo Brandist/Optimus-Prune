@@ -12,7 +12,6 @@ add_message_files(
   FILES
   lidar.msg
   gps.msg
-  wheel.msg
 )
 
 generate_messages(
