@@ -27,9 +27,8 @@ For localisation, normally SLAM uses the LiDaR on order to extract landmarks for
 **Parts**
 
 - GPS
-- Landmark extraction from mapping
-- odometry
-- Gyro
+- Lidar odometry/landmark extraction
+- odometry with IMU (accelometer and gyrometer)
 
 ### Mapping
 
@@ -38,7 +37,6 @@ Internally, mapping is done via a set of coordinates in the form of a vector, es
 - Lidar
 - GPS
 - landmarks
-- coordinates of plants (sick) (?)
 - libs for making a map, visualised of just a set of coordinates
 
 ### Navigation
