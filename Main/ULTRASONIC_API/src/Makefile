@@ -16,4 +16,4 @@ unitTest:
 	$(CC) -Wall -pthread -o unitTest cpp/Sensor.cpp cpp/Test.cpp -lpigpio -lrt
 
 clean:
-	rm *.o UltrasonicAPI unitTest
+	rm unitTest

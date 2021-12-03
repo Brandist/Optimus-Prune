@@ -1,5 +1,5 @@
 #include "SensorArray.hpp"
-
+/*
 bool Scan()
 {
     float sensorDistance;
@@ -43,6 +43,7 @@ SensorArray::SensorArray(int tooClose)
         
     }
 
-    pinConfigFile.close();*/
+    pinConfigFile.close();
 }
 SensorArray::~SensorArray();
+*/

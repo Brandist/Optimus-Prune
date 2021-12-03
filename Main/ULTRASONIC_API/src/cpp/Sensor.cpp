@@ -4,86 +4,40 @@ static uint32_t rise_tick = 0;    // Pulse rise time tick value
 static uint32_t pulse_width = 0;  // Last measured pulse width (us)
 static bool notWaiting = true;
 
-/* Function: triggers the sensor and reads the data
+/* Function: Reads the serial output from the sensor and converts it to distance
  * 
- * Output: 100 if things went wrong
- *         otherwise the pulse length of the sensor
+ * Output: The distance of the object to the sesor in mm
 */
 float Sensor::ReadSensor()
 {
-    bool wasTriggered = Trigger();
-    if (wasTriggered)
-    {
-        //start reading the pulse
-    while (!notWaiting)
-    {
-    }
-    
-    }
-
-
-    return pulse_width;    
 }
 
 
-/* Function: triggers the sensor with a 10 microsecond pulse
- * 
- * Output: returns true if it worked. Else return false
-*/
-bool Sensor::Trigger()
-{
-    int validate = gpioTrigger(triggerPin, 10, 1);      //0 if it worked
-    return !validate;
-}
-
-/* Function: the callback function that will fill the pulse_width variable
- *           The function is called whenever the pin changes state
- * 
- * Output: nothing
- */
-void ReadPulse(int gpio, int level, uint32_t tick) {
-    printf("GPIO %d became %d at %d", gpio, level, tick);
-    if (level == 1) {  // rising edge
-        rise_tick = tick;
-    }
-    else if (level == 0) {  // falling edge
-        pulse_width = tick - rise_tick;  // TODO: Handle 72 min wrap-around
-    }
-}
 
 std::string Sensor::UnitTest(){
 
-    if (gpioInitialise() < 0)
-    {
-        return "Failed";
-    }
+    
     float pulseLenght = ReadSensor();
     return ("Pulse length = " + std::to_string(pulseLenght));
 }
 
 Sensor::Sensor(int listenPin, int triggerPin)
 {
-    gpioInitialise();
-    //this->rise_tick = 0;
-    //this->pulse_width = 0;
-    //initialize the raspberry pi GPIO
-    // needs to go in the main of the main
-    
-
+   
+   /* serialport = open(port,O_RDWR);
+    std::string str;
+    std::fstream f;
+    f.open(port);
+    while(f>>str)
+        std::cout<<str<<std::endl;
+*/
     //set the pins to input and output
     this->listenPin=listenPin;
     this->triggerPin=triggerPin;
-    gpioSetMode(listenPin, PI_INPUT);
-    gpioSetMode(triggerPin, PI_OUTPUT);
-    gpioSetAlertFunc(this->listenPin,ReadPulse);
-    //INP_GPIO(listenPin);
-    //INP_GPIO(triggerPin);
-    //OUT_GPIO(triggerPin);
 
 }
 
 Sensor::~Sensor()
 {
-//niet hier want dit terminates de library. Moet wel ergens gebeuren
-gpioTerminate();
+
 }
