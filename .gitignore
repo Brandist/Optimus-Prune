@@ -1,4 +1,5 @@
 .vscode
+
 # Prerequisites
 *.d
 
@@ -31,3 +32,6 @@
 *.exe
 *.out
 *.app
+
+# Specific files
+gpsdemo
