@@ -1,33 +1,30 @@
 #ifndef _ultrasonic_h
 #define _ultrasonic_h
 
-
-#include<iostream>
-
-
+#include <iostream>
+#include <stdio.h>
+#include <string.h>
+#include <fcntl.h>
+#include <errno.h>
+#include <termios.h>
+#include <unistd.h>
+#include <cstddef>
+#include <fstream>
 
 class Sensor
 {
 private:
-    int listenPin;
-    int triggerPin;
+    std::string usbPort;
+    struct termios tty;
+    int serial_port;
 
-    int serialport;
+    void init();
 
-    bool Trigger();
-    //void ReadPulse(int gpio, int level, uint32_t tick);
-
-    
 public:
-    Sensor(int listenPin,int triggerPing);
+    Sensor(std::string usbPort);
     ~Sensor();
     float ReadSensor();
     std::string UnitTest();
-    //void SetRiseTick(int);
-   // uint32_t GetRiseTick();
 };
-
-
-
 
 #endif
