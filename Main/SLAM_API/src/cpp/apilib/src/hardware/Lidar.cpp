@@ -2,17 +2,11 @@
 
 using namespace hardware;
 
+// These files are meant to communicate with the other API's (direct hardware access)
 Lidar::Lidar(){
 
 }
 
-/* TODO: 
-    - change data type to raw lidar data type
-    - remove set method
-    - replace dummy data with actual point cloud data 
-    - Compile with cmake in order to compile the PCL, see the tutorial
-    - Think about how I can receive the data from the Lidar (ROS?)
-*/
 int Lidar::readRawData(){
     // request the other API for reading data, send the raw data back to service
     // The PCL code should be either in the service or in the Lidar API. 

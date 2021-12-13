@@ -8,9 +8,6 @@ GPSService::GPSService() {
 
 // This should actually be the readGps msg and the entire message should be a struct (made by Brandon) and filled there
 std::vector<float> GPSService::requestData(){
-    // Call the hardware layer to get the raw data
-    int data = gps.readRawData();
-
     std::vector<float> gps_data;
     gps_data.push_back(1.0); // x
     gps_data.push_back(2.0); // y

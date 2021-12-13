@@ -12,14 +12,10 @@ namespace services{
     class LidarService {
         private:
             hardware::Lidar lidar;
-            int raw_data;
             Eigen::Matrix3Xf convertRawDataToMatrix();
-            void setRawData(int raw_data);
         public:
             LidarService();
-            Eigen::Matrix3Xf requestData();
             pcl::PointCloud<pcl::PointXYZ>::Ptr requestPCD();
-            int getRawData();
     };
 }
 

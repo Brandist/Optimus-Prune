@@ -14,7 +14,6 @@ namespace controllers{
         public:
             LidarController();
             pcl::PointCloud<pcl::PointXYZ>::Ptr requestPCD();
-            Eigen::Matrix3Xf requestData();
     };
 }
 
