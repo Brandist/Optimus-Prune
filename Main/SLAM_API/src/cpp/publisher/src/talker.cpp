@@ -19,7 +19,6 @@ int main(int argc, char **argv) {
     ros::init(argc, argv, "talker");
     ros::NodeHandle n;
 
-    // TODO: add second topic for the GPS, which separate msg
     ros::Publisher gps_data = n.advertise<publisher::gps>("gps_topic", 1000);
     ros::Publisher lidar_data = n.advertise<publisher::lidar>("lidar_topic", 1000);
 
@@ -31,25 +30,17 @@ int main(int argc, char **argv) {
     
     // TODO:
     // change Eigen Matrix to vector vector to reduce complexity
-    //  dubbel check if this actually reduces complexity
     while(ros::ok()){
         std::vector<float> g_data = gps_cont.requestData();
-        // Eigen::Matrix3Xf l_data = lidar_cont.requestData();
         pcl::PointCloud<pcl::PointXYZ>::Ptr cloud = lidar_cont.requestPCD();
         std::vector<float> x_a, y_a, z_a;
 
-        // Deprecated code, makes use of the PCD conversion to matrix 
-        // std::cout << l_data.cols() << std::endl;
-        // for (int i=0; i<l_data.cols(); ++i){
-        //     x_a.push_back(l_data.col(i).x());
-        //     y_a.push_back(l_data.col(i).y());
-        //     z_a.push_back(l_data.col(i).z());
-        // }
         for (const auto& point: *cloud){
             x_a.push_back(point.x);
             y_a.push_back(point.y);
             z_a.push_back(point.z);
         }
+
         msg_lidar.x = x_a;
         msg_lidar.y = y_a;
         msg_lidar.z = z_a;
