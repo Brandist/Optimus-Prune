@@ -12,13 +12,16 @@ namespace EKF{
         private:
             map::Map slam_map;
             Eigen::Vector3f robot_position;
+            Eigen::Matrix3Xf lidar_data;
             void setRobotPosition(Eigen::Vector3f robot_position);
+            void setLidarData(Eigen::Matrix3Xf lidar_data);
         public:
             Ekf();
-            void init(Eigen::Vector3f robot_position);
+            void init(Eigen::Vector3f robot_position, Eigen::Matrix3Xf lidar_data);
             void performOdometry();
             void performLandmarkExtraction();
             Eigen::Vector3f getRobotPosition();
+            Eigen::Matrix3Xf getLidarData();
     };
 }
 
