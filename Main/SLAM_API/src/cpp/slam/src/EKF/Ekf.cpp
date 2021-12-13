@@ -10,11 +10,13 @@ void Ekf::init(Eigen::Vector3f robot_position){
     this->robot_position = robot_position;
 }
 
-// Find a way where the wheel data is coming from and how to get it 
-// (Is it IMU or something else?)
+// TODO:
+// Perform odometry from multiple sensor
+// maybe odometry requires other files, for structure, not sure yet
 void Ekf::performOdometry(){
     Eigen::Vector3f curr_robot_pos = getRobotPosition();
-
+    Eigen::Matrix3Xf mat = slam_map.getLidarData();
+    std::cout << mat.size() << std::endl;
     // after all calculations 
     setRobotPosition(curr_robot_pos);
 }

@@ -12,19 +12,22 @@ Map::Map(){}
     And because of the lidar data, we can see if a set of coordinates is far away (indicating a wall or tree) */
 void Map::init(){
     Eigen::Matrix3Xf mat = getLidarData();
-    Node* nodes = matToNodes();
+    // Conversion to nodes is not yet needed
+    // Node* nodes = matToNodes();
     // std::cout << "s: " << nodes[0].label << std::endl;
 
     setRobotPositionVector(getGPSData());
     setStartVector(getRobotPositionVector());
     setEndVector(mat.col(mat.cols()-1));
 
-    setAllNodes(nodes);
-    setRobotNode(initRobotPositionNode());
-    setStartNode(initStartPositionNode());
-    setEndNode(initEndPositionNode());
+    // Only needed when pathfinding is going to be implemented
+    // even then, think of a better way due to complexity
+    // setAllNodes(nodes);
+    // setRobotNode(initRobotPositionNode());
+    // setStartNode(initStartPositionNode());
+    // setEndNode(initEndPositionNode());
 
-    delete[] nodes;
+    // delete[] nodes;
 }
 
 // Conversion of a matrix to nodes, this is the entire lidar incoming data

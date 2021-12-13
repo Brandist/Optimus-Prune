@@ -18,6 +18,7 @@ namespace services{
         public:
             LidarService();
             Eigen::Matrix3Xf requestData();
+            pcl::PointCloud<pcl::PointXYZ>::Ptr requestPCD();
             int getRawData();
     };
 }

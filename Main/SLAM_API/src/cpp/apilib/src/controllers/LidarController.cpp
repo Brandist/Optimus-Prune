@@ -6,6 +6,11 @@ LidarController::LidarController() {
 
 }
 
+pcl::PointCloud<pcl::PointXYZ>::Ptr LidarController::requestPCD(){
+    pcl::PointCloud<pcl::PointXYZ>::Ptr cloud = lidar_service.requestPCD();
+    return cloud;
+}
+
 /* Output: Matrix or list of vectors, something that SLAM can work with
     TODO:
     - Add some kind of exception handling

@@ -1,6 +1,6 @@
 #include "slam/Slam.h"
 
-/* This is the main SLAM file. Consider this as the main loop
+/* The main SLAM loop
     initalise SLAM with the controllers for the different components
     then the SLAM process can start
     The start process is still work in progress
@@ -29,7 +29,6 @@ void Slam::initGPSData(float x, float y, float z){
 
 void Slam::initLidarData(std::vector<float> x, std::vector<float> y, std::vector<float> z){
     // Some error handling for security, this should be done with exception handling later on
-
     int matrix_size = x.size();
     Eigen::Matrix3Xf mat(3, matrix_size);
 

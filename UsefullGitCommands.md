@@ -30,10 +30,6 @@
 
 > git push
 
-## undo commit
-
-git reset --soft HEAD~1
-
 ## pull
 
 > git pull
@@ -63,6 +59,10 @@ git reset --soft HEAD~1
 > git branch -d SOME_BRANCH_NAME
 
 ## merging 
+
+Tip: Always pull the main branch before merging and pushing to avoid conflicts.
+
+No one should be working on your branch, so this shouldnt be the case often.
 
 ### current branch with main
 

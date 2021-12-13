@@ -13,6 +13,7 @@ namespace controllers{
             services::LidarService lidar_service;
         public:
             LidarController();
+            pcl::PointCloud<pcl::PointXYZ>::Ptr requestPCD();
             Eigen::Matrix3Xf requestData();
     };
 }
