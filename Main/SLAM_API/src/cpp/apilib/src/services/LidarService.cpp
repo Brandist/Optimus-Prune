@@ -11,7 +11,7 @@ LidarService::LidarService() {
 // This might mean that removing the layers might be better in structure, honestly, it already feels bloated and confusing
 pcl::PointCloud<pcl::PointXYZ>::Ptr LidarService::requestPCD(){
     pcl::PointCloud<pcl::PointXYZ>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZ>);
-    if (pcl::io::loadPCDFile<pcl::PointXYZ> ("/home/sfp/Documents/source/repos/Optimus-Prune/Main/SLAM_API/src/cpp/apilib/src/services/pcd/lidar_ilse_hex.pcd", *cloud) == -1){
+    if (pcl::io::loadPCDFile<pcl::PointXYZ> ("/home/sfp/Documents/source/repos/Optimus-Prune/Main/SLAM_API/src/cpp/apilib/src/services/pcd/77239.pcd", *cloud) == -1){
         PCL_ERROR("Couldn't read the pcd file \n");
     }
     return cloud;
