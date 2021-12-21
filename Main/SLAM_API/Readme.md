@@ -18,21 +18,22 @@ Although it might not be required, the map can also be used to implement pathfin
 
 ## Are there any alternatives?
 
-SLAM is not a method or a function perse, it is more of a set of operations fused together in order to maintain localisation and mapping. This means that an alternative to the whole SLAM operation is not the correct way to look at it. SLAM can be implemented in multiple ways, with mutliple and different sensors. For example, Visual SLAM (VSLAM), uses multiple visualised sensors such as cameras, lidars, ultrasonic sensors, in order to capture frames and extract points from these frames to track where the robot is. The lidar is used to create a map of the surroundings. Lidar SLAM is a way that only uses the Lidar as input data, also to localise itself. It does this with a method called landmark extraction, which extracts unique points of the environment that can be followed while driving to calculate the distance between the robot and the landmark. Other SLAM methods, such as GraphSLAM, which is a 2D way to construct a map, which is a grid-based map. 
+SLAM is not a method or a function perse, it is more of a set of operations fused together in order to maintain localisation and mapping. This means that an alternative to the whole SLAM operation is not the correct way to look at it. SLAM can be implemented in multiple ways, with mutliple and different sensors. For example, Visual SLAM (VSLAM), uses multiple visualised sensors such as cameras, lidars, ultrasonic sensors, in order to capture frames and extract points from these frames to track where the robot is. The lidar is used to create a map of the surroundings. Lidar SLAM is a way that only uses the Lidar as input data, also to localise itself. It does this with a method called landmark extraction, which extracts unique points of the environment that can be followed while driving to calculate the distance between the robot and the landmark. Other SLAM methods, such as GraphSLAM, which is a 2D way to construct a map, i.e. a gridmap. GraphSLAM can be used to construct a path from A to B by using a pathfinding algorithm. This is used in the videogame industry. 
 
 ## The communication between SLAM and hardware
 
-The communication between the SLAM process and hardware is written in an API format. So SLAM can request the formatted data by calling the API. The API the requests the raw_data from the hardware components by calling the respective API's of the components (GPS, Gyro, Lidar). The API is divided in 3 layers:
+The communication between the SLAM process and hardware is written as an API. Where the publisher requests data from the corresponding hardware controller. The controller handles the exceptions and requests the data from the hardware. The hardware class itself has direct communication with the hardware component. The hardware layer, called services, is also responsible for possible formatting of the incoming data. Most of the time this will be done by the other API, these are developed by other people in this project. With this structure way we can pinpoint the errors that are made. For example, if an error occured which has something to do with the hardware, the fault must lie in the hardware layer and all the exceptions are caught in the controller layer. The structure is as follows:
 
-- Controllers
-- Services
-- Hardware
+- apilib/src/controllers/GPSController.cpp
+- apilib/src/controllers/LidarController.cpp
+- apilib/src/service/GPS.cpp
+- apilib/src/service/Lidar.cpp
 
-Where the controller layer calls the service and service calls the hardware. The controller layer gets the converted data, which SLAM can work with, from the service and is also responsible for exceptionhandling. The service layer gets the raw_data from the hardware components and converts the raw_data to formatted data, sends it back to the controller. The hardware layer is responsible for requesting the raw_data from the components API's. 
+With there corresponding header files in the include directory.
 
 Having the API separated into 3 parts makes it easier to read, easier to understand and every layer is responsible for different structures within the API. So if something goes wrong with the hardware external API communication, we know that the fault is in the hardware layer. The same counts for the service layer. If we get the raw_data, and something goes wrong in the conversion, the controller layer notices it and says that there is a error coming from the service layer.
 
-Direct communication between SLAM and these controllers is still something we're looking at. This can be done via ROS by separating the SLAM API and the SLAM process, or direct reading in the same project. 
+The data, GPS and lidar, are each converted to their own ROS messages in the publisher directory. The talker.cpp is responsible for calling the implementing the apilib and calling the controllers. Writing the output to ROS specific messages containing GPS and Lidar data. These messages are then published, each on their own ROS topics. This way the subscriber node, which is SLAM, can subscribe to the given topics and convert the ROS messages back
 ## SLAM parts
 
 - Reading data from the controllers
