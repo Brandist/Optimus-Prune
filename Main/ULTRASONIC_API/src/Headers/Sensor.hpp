@@ -17,11 +17,16 @@ private:
     std::string usbPort;
     struct termios tty;
     int serial_port;
+    std::string sensorPlace;
+    
 
     void init();
 
 public:
+bool initialized = false;
+
     Sensor(std::string usbPort);
+    Sensor();
     ~Sensor();
     float ReadSensor();
     std::string UnitTest();

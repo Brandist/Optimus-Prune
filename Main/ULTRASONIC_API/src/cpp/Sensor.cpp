@@ -6,8 +6,9 @@
 */
 float Sensor::ReadSensor()
 {
+    
     unsigned char c;
-    memset(&c, '\0', 1);
+    memset(&c, '\0', sizeof(c));
     char distance[4];
     int dist = 0;
     //read distance. It are 4 bytes so a loop of 4
@@ -17,11 +18,31 @@ float Sensor::ReadSensor()
         distance[i] = c;
         printf("result: %x\n", c);
     }
+    int checksum;
     //if the readin starts with ff,it's good
     if((distance[0]&0xff) == 0xff){
+        checksum = distance[1]+distance[2]+distance[0] & 0x00ff;
         dist = distance[1]<<4|distance[2];
         printf("distance? %i\n",dist);
+        printf("checsum = %x\n",checksum);
     }
+    // else if(distance[0]==0)
+    // {
+    //     for (int i = 0; i < 4; i++)
+    // {
+    //     read(this->serial_port, &c, sizeof(c));
+    //     distance[i] = c;
+    //     printf("result: %x\n", c);
+    // }
+    // int checksum;
+    // //if the readin starts with ff,it's good
+    // if((distance[0]&0xff) == 0xff){
+    //     checksum = distance[1]+distance[2]+distance[0] & 0x00ff;
+    //     dist = distance[1]<<4|distance[2];
+    //     printf("distance? %i\n",dist);
+    //     printf("checsum = %x\n",checksum);
+    // }
+    // }
     return dist;
 }
 
@@ -76,8 +97,12 @@ void Sensor::init()
     }
     this->tty = tty;
     this->serial_port=serial_port;
-}
 
+    initialized = true;
+}
+Sensor::Sensor(){
+
+}
 Sensor::~Sensor()
 {
     close(serial_port);
