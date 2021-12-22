@@ -2,19 +2,17 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "apilib/Ihardware/GPS.h"
 
-#ifndef _gpsservice_h
-#define _gpsservice_h
+#ifndef _gps_h
+#define _gps_h
 
 namespace services{
-    class GPSService {
+    class GPS {
         private:
-            hardware::GPS gps;
             int raw_data;
             void setRawData(int raw_data);
         public:
-            GPSService();
+            GPS();
             std::vector<float> requestData();
             int getRawData();
     };

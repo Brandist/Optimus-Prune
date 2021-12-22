@@ -7,8 +7,8 @@ GPSController::GPSController(){
 }
 
 // TODO:
-    // - Add some kind of exception handling
+    // - Add exception handling
 std::vector<float> GPSController::requestData(){
-    std::vector<float> data = gps_service.requestData();
+    std::vector<float> data = gps.requestData();
     return data;
 }

@@ -2,7 +2,7 @@
 #include <iostream>
 #include <string>
 #include <Eigen/Core>
-#include "apilib/Iservices/ILidarService.h"
+#include "apilib/Iservices/ILidar.h"
 
 #ifndef _lidarcontroller_h
 #define _lidarcontroller_h
@@ -10,7 +10,7 @@
 namespace controllers{
     class LidarController {
         private:
-            services::LidarService lidar_service;
+            services::Lidar lidar;
         public:
             LidarController();
             pcl::PointCloud<pcl::PointXYZ>::Ptr requestPCD();

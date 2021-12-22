@@ -9,18 +9,16 @@
 #include <pcl/io/file_io.h>
 #include <pcl/io/image.h>
 #include <pcl/common/common.h>
-#include "apilib/Ihardware/Lidar.h"
 
-#ifndef _lidarservice_h
-#define _lidarservice_h
+#ifndef _lidar_h
+#define _lidar_h
 
 namespace services{
-    class LidarService {
+    class Lidar {
         private:
-            hardware::Lidar lidar;
             Eigen::Matrix3Xf convertRawDataToMatrix();
         public:
-            LidarService();
+            Lidar();
             pcl::PointCloud<pcl::PointXYZ>::Ptr requestPCD();
     };
 }

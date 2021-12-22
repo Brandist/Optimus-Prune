@@ -26,10 +26,8 @@ include_directories(
 add_library(${PROJECT_NAME}
   src/controllers/GPSController.cpp
   src/controllers/LidarController.cpp
-  src/services/GPSService.cpp
-  src/services/LidarService.cpp
-  src/hardware/GPS.cpp
-  src/hardware/Lidar.cpp
+  src/services/GPS.cpp
+  src/services/Lidar.cpp
 )
 
 link_directories(${PCL_LIBRARY_DIRS})

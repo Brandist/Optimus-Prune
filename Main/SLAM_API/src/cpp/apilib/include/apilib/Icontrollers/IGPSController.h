@@ -2,7 +2,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "apilib/Iservices/IGPSService.h"
+#include "apilib/Iservices/IGPS.h"
 
 #ifndef _gpscontroller_h
 #define _gpscontroller_h
@@ -10,7 +10,7 @@
 namespace controllers{
     class GPSController {
         private:
-            services::GPSService gps_service;
+            services::GPS gps;
         public:
             GPSController();
             std::vector<float> requestData();
