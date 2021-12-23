@@ -1,0 +1,3 @@
+# Publisher / Talker
+
+The publisher directory is part of the ROS node structure. The publisher is responsible for including the apilib and request the GPS (IMU) and Lidar data is respectable format. For each of these data objects, topics and ROS messages are made. These messages are basically custom ROS structs. These are filled with the requested data and then send on the corresponding topic bus. 

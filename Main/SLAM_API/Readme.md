@@ -86,4 +86,5 @@ Linking the pub/apilib and sub/slam packages together is achieved by manipulatin
 
 ## Additional information
 
-This repository is written in C++ for a ROS-Noetic based implemention: http://wiki.ros.org/noetic
+- This repository is written in C++ for a [ROS-Noetic](http://wiki.ros.org/noetic) based implemention
+- After performing all the requirements and includes in order to build this project. It can be run with the commands stated in [resources/ros_notes.md](https://github.com/Brandist/Optimus-Prune/blob/SLAM_API/Main/SLAM_API/resources/ros_notes.md)

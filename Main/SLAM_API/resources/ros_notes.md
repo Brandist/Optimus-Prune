@@ -1,6 +1,6 @@
 # ROS working steps:
 
-ROS Noetic should already be installed thanks to Ijdo
+ROS Noetic should already be installed
 
 ## Important
 
@@ -65,7 +65,7 @@ float64[] y
 float64[] z
 ```
 
-The above file states a struct containing 3 float arrays for x, y, z coordinates. float64 translates to a double in c++ code, in c++, float32 is an actual float. [Follow this link for all available datatypes](http://wiki.ros.org/msg).
+The above file states a struct containing 3 float arrays for $x, y, z$ coordinates. float64 translates to a double in c++ code, in c++, float32 is an actual float. [Follow this link for all available datatypes](http://wiki.ros.org/msg).
 
 In order to compile and use the message in code, we need to alter the CMakeLists.txt and package.xml first. So, after creating the .msg file in /src/cpp/packageName/msg/, add the following lines to the CMakeLists.txt
 

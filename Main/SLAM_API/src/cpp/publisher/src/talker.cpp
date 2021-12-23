@@ -49,7 +49,8 @@ int main(int argc, char **argv) {
         msg_gps.aY = g_data.at(1);
         msg_gps.aZ = g_data.at(2);
 
-        // ROS_INFO("%f ", msg.x[0]);
+        // Print message data
+        // ROS_INFO("%f ", msg_gps.x[0]);
         lidar_data.publish(msg_lidar);
         gps_data.publish(msg_gps);
         ros::spinOnce();
