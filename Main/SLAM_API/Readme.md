@@ -1,6 +1,6 @@
 # SLAM based information and other stuff
 
-SLAM stands for Simultaneous Localization and Mapping. SLAM is defined as the problem of constructing or updating a map of an unknown environment while simultaneously keeping track of the localistion of the robot in the environment. There have been several algorithms available for solving it, such as particle filter, EKF (Extended Kalman Filter), GraphSLAM, and more. In this project, the localisation part of SLAM will be done mainly with a GPS-RTK, and a localisation method called odometry. The mapping part will be done with a Lidar. The Lidar (Light Detection and Ranging of Laser Imaging Detection and Ranging), The output of a lidar is a point cloud, a set of 3D points ($x, y, z$). Which indicates coordinates and the intensity of points of the environment, where a map can be made around the robot. The robot can use this map to extract features to makeits position more robust. 
+SLAM stands for Simultaneous Localization and Mapping. SLAM is defined as the problem of constructing or updating a map of an unknown environment while simultaneously keeping track of the localisation of the robot in the environment. There have been several algorithms available for solving it, such as particle filter, EKF (Extended Kalman Filter), GraphSLAM, and more. In this project, the localisation part of SLAM will be done mainly with a GPS-RTK, and a localisation method called odometry. The mapping part will be done with a Lidar. The Lidar (Light Detection and Ranging of Laser Imaging Detection and Ranging), The output of a lidar is a point cloud, a set of 3D points ($x, y, z$). Which indicates coordinates and the intensity of points of the environment, where a map can be made around the robot. The robot can use this map to extract features to makeits position more robust. 
 
 This is the general definition and process of SLAM. Within the SLAM map, the robot can find its way by just driving or use a pathfinding algorithm to find the optimal path to its destination. 
 
@@ -27,11 +27,10 @@ The communication between the SLAM process and hardware is written as an API. Wh
 - apilib/src/service/GPS.cpp
 - apilib/src/service/Lidar.cpp
 
-With there corresponding header files in the include directory.
-
-Having the API separated into 3 parts makes it easier to read, easier to understand and every layer is responsible for different structures within the API. So if something goes wrong with the hardware external API communication, we know that the fault is in the hardware layer. The same counts for the service layer. If we get the raw_data, and something goes wrong in the conversion, the controller layer notices it and says that there is a error coming from the service layer.
+With their corresponding header files in the include directory.
 
 The data, GPS and lidar, are each converted to their own ROS messages in the publisher directory. The talker.cpp is responsible for calling the implementing the apilib and calling the controllers. Writing the output to ROS specific messages containing GPS and Lidar data. These messages are then published, each on their own ROS topics. This way the subscriber node, which is SLAM, can subscribe to the given topics and convert the ROS messages back
+
 ## SLAM parts
 
 - Reading data from the controllers
