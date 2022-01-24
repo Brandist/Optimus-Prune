@@ -1,3 +1,4 @@
+// This is the interface of the corresponding service class
 #include <iostream>
 #include <string>
 #include <Eigen/Core>
@@ -9,6 +10,7 @@
 #include <pcl/io/file_io.h>
 #include <pcl/io/image.h>
 #include <pcl/common/common.h>
+#include <pcl/io/pcd_io.h>
 
 #ifndef _lidar_h
 #define _lidar_h

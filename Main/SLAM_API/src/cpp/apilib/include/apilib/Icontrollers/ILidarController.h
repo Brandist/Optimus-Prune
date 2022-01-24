@@ -1,4 +1,4 @@
-// This is just the interface of the corresponding controller class
+// This is the interface of the corresponding controller class
 #include <iostream>
 #include <string>
 #include <Eigen/Core>

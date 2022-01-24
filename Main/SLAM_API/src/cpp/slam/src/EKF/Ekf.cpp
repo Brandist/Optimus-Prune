@@ -2,6 +2,13 @@
 
 using namespace EKF;
 
+/* The EKF is responsible for keeping the data up-to-date and performing localisation enhancing methods
+ such as odometry, in order to update the robots position
+ An EKF status matrix is used to store the robots coordinates and status, as wel as the coordinates of certain
+ objects or features for odometry. 
+ More information on the mathematical side of the EKF can be found on the report and also here:
+ https://www.iri.upc.edu/people/jsola/JoanSola/objectes/curs_SLAM/SLAM2D/SLAM%20course.pdf 
+*/
 Ekf::Ekf(){
 
 }
@@ -11,26 +18,17 @@ void Ekf::init(Eigen::Vector3f robot_position, Eigen::Matrix3Xf lidar_data){
     this->lidar_data = lidar_data;
 }
 
+
 // TODO:
-// Perform odometry from multiple sensors
-// maybe odometry requires other files, for structure, not sure yet
+// Perform odometry from multiple sensors, maybe make seperate function per sensor (GPS, Lidar, IMU etc)
+// Think about of odometry requires a seperate class or function.
+// How to add a new file and compile it can be found in the README in the root of the project
 void Ekf::performOdometry(){
     Eigen::Vector3f curr_robot_pos = getRobotPosition();
     Eigen::Matrix3Xf mat = getLidarData();
 
-
-    // std::cout << mat.size() << std::endl;
     // after all calculations 
     setRobotPosition(curr_robot_pos);
-}
-
-// Is this needed?
-// Maybe GPS & odo is good enough?
-void Ekf::performLandmarkExtraction(){
-
-    // after all calculations
-    Eigen::Vector3f new_robot_position = this->robot_position;
-    setRobotPosition(new_robot_position);
 }
 
 // ---------------------------------------------------------------------------------

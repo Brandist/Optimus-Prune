@@ -1,4 +1,4 @@
-// This is just the interface of the corresponding service class
+// This is the interface of the corresponding service class
 #include <iostream>
 #include <string>
 #include <vector>

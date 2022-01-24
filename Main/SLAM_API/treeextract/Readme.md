@@ -9,51 +9,23 @@ There are multiple features that can be focussed on, for example, certain poles 
 
 ## What is tree extraction?
 
+As mentioned earlier, tree extraction is a method to fully extract a tree, its stump, the stem and the crown from a frame. The frame can be gathered from either the Lidar or the camera, but it needs to be converted to a point-cloud first.
 ## Pre-requirements to run TreeSeg
 
-<!-- PCL installation
-library, path, includes, linking -->
+The installation of TreeSeg can be found on the github: https://github.com/apburt/treeseg.
+TreeSeg requires the installation the Point Cloud Library (PCL). This should be installed as wel. During the installation, some problems might occur, such as library linking, external needed libraries and file includes from the PCL. Solutions to these problems are not simple enough to explain. Linking problems general occurs when symlinks to the library aren't setup, the same goes for includes.  
 
-<!-- TODO:
-        Explain what kind of data are in these directories -->
 ## Structure
 
 In this directory multiple sub-directories are created to divide the camera, lidar and png files.
 
-The ply files are extracted from the Neuvision viewer and then converted to pcd files with a python script. The pcd file stands for Point Cloud Data, pcd is what the Point Cloud Library requires as input, logically, TreeSeg does too.
+The ply files are extracted from the Neuvision viewer and then converted to pcd files with a python script. Which you can run with Python3 nameofpythonfile nameofplyfile. The conversion is available the other way around as wel. The python file is located in src/python. The pcd file stands for Point Cloud Data, pcd is what the Point Cloud Library requires as input, logically, TreeSeg does too.
 
-The file names are ordered with a number, so that we know which the ply, pcd, png and dat belong to each other.
+The file names are ordered with a number, so that we know which the ply, pcd, png belong to each other.
 
 ## Steps
 
-Given that we converted the ply file to pcd, we can begin with getting the dtm.dat file. Which stands for Digital Terrain Model data file. Containing the x y z of the terrain extracted from the input pcd.
+The documentation of Tree Segmentation can be found here: https://github.com/apburt/treeseg.
+While the steps of performing TreeSeg on the pcd files can be found here: https://github.com/apburt/treeseg/blob/master/doc/tutorial_overview.md.
 
-> getdtmslice 2 2.5 3 6 somepcdfilename.tile.0.pcd > somedatfilename.dtm.dat
-
-The arguments are explained in the documentation of TreeSeg (link to TreeSeg)
-
-<!-- TODO: 
-        explain breefly how TreeSeg works, the steps and links to the documentation -->
-## Tree identification
-
-- Euclidean clustering
-  - Divide in clusters based on spatial distances
-- Region-based segmentation
-  - Reduce clusters to regions based on underlying surface properties
-- Shape fitting-RANSAC
-  - Try to fit cylinders to each region
-  - determine the likelihood of a stem
-- PCA
-  - Calculate the angle between region and ground
-  - regions perpendicular to ground more likely to be stems
-
-## Stem segmentation
-
-- Shape fitting-RANSAC
-  - describe orientation and radius of each stem
-- Spatial Filtering
-  - generate sections of the larger point cloud containing each stem and vegetation
-- Plane fitting
-  - Classification
-- Region-based segmentation
-  - Organise sections to region, to classify each element of vegetation
+Tip: After every step, convert the pcd file back to ply because ply files can be visualised with Meshlab. This can be handy for visualising the in between results of TreeSeg to see possibble faults.

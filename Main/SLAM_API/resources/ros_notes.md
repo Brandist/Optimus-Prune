@@ -116,8 +116,6 @@ After compiling the header is located in the ROS folder, which can be generated 
 
 > rosmsg list
 
-
-
 This will show every msg generated from every package available to you. A lot of different messages are available, such as arrays, vectors, even pointclouds from the PCL lib, odometry, robot status etc. But in this case a custom message is added for scaleability. If the msg isnt in the list, make sure to compile it a couple of times. And make sure the include names correspond with the file names, the same goes for the CMakeLists.txt names. The include line might show an error as well, this shouldnt be a problem when compiling. 
 
 To actually use the message and initialise the datatypes. We need to change the datatype from the ROS publisher object created from the tutorial. Like this:

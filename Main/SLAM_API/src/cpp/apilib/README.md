@@ -4,7 +4,7 @@ apilib is a library containing the communication between the GPS and Lidar. The 
 
 ## Controllers 
 
-The GPS Controller is exceptionhandling and returning any errors that may occur when calling the GPS requestdata. The same goes for the Lidar.
+The GPS Controller handles the exception (not implemented yet) and returning any errors that may occur when calling the GPS requestdata. The same goes for the Lidar.
 
 ## Service/hardware layer
 
@@ -13,3 +13,7 @@ The GPS and Lidar files are responsible for setting up a connection to the hardw
 ## Additional data
 
 This directory is a library, meaning that it cannot run on its own, it needs to be included in order to test and run the methods. The publisher directory includes this library, calls these methods and sends the data on the ROS bus.
+
+
+### How to implement PCL (Pointcloud library) into the project
+

@@ -1,7 +1,5 @@
 # SLAM based information and other stuff
 
-## What is SLAM?
-
 SLAM stands for Simultaneous Localization and Mapping. SLAM is defined as the problem of constructing or updating a map of an unknown environment while simultaneously keeping track of the localistion of the robot in the environment. There have been several algorithms available for solving it, such as particle filter, EKF (Extended Kalman Filter), GraphSLAM, and more. In this project, the localisation part of SLAM will be done mainly with a GPS-RTK, and a localisation method called odometry. The mapping part will be done with a Lidar. The Lidar (Light Detection and Ranging of Laser Imaging Detection and Ranging), The output of a lidar is a point cloud, a set of 3D points ($x, y, z$). Which indicates coordinates and the intensity of points of the environment, where a map can be made around the robot. The robot can use this map to extract features to makeits position more robust. 
 
 This is the general definition and process of SLAM. Within the SLAM map, the robot can find its way by just driving or use a pathfinding algorithm to find the optimal path to its destination. 
@@ -82,9 +80,9 @@ The publisher package includes the apilib packages. apilib contains the controll
 
 The subscriber package includes the slam package. slam contains all the SLAM based logic, which is creating the map, localisation and odometry.
 
-Linking the pub/apilib and sub/slam packages together is achieved by manipulating the CMakeLists.txt an package.xml, both created by the catkin_create_pkg command. (source: https://roboticsbackend.com/ros-include-cpp-header-from-another-package/). The ROS commands used to create the structure are documented and can be found in the resources folder.
+Linking the pub/apilib and sub/slam packages together is achieved by manipulating the CMakeLists.txt and package.xml, both created by the catkin_create_pkg command. (source: https://roboticsbackend.com/ros-include-cpp-header-from-another-package/). The ROS commands used to create the structure are documented and can be found in the resources folder.
 
 ## Additional information
 
-- This repository is written in C++ for a [ROS-Noetic](http://wiki.ros.org/noetic) based implemention
+- This repository is written in C++ for a [ROS-Noetic](http://wiki.ros.org/noetic) based implemention on Ubuntu version 18. 
 - After performing all the requirements and includes in order to build this project. It can be run with the commands stated in [resources/ros_notes.md](https://github.com/Brandist/Optimus-Prune/blob/SLAM_API/Main/SLAM_API/resources/ros_notes.md)

@@ -1,18 +1,25 @@
-// Reading the data from the Lidar and GPS (IMU) and putting the coordinates a map
+// Goal: 
+    // Reading the data from the Lidar and GPS (IMU) and putting the coordinates a map
 #include "slam/imapping/Imap.h"
 
 using namespace map;
 
 Map::Map(){}
 
+// Thinking out loud:
 /* get the lidar data as a Matrix object,
-    convert the Matrix object to a Node (custom struct)
+    convert the Matrix object to a Node (custom struct) (optional)
     Make a list of nodes. Nodes contain a label giving the Nodes a label
     which is nice for pathfinding and mapping since we can see what a node is.
     And because of the lidar data, we can see if a set of coordinates is far away (indicating a wall or tree) */
+
+// For mapping and pathfinding, matrix objects are converted to custom Nodes which contain labels indicating what they are
+// This might not be needed and due to the complexity of conversion, it might not be the best solution
+// The Node struct is located in the corresponding header file
+// The conversion here is commented and should be researched first if using Nodes for mapping is the best option
 void Map::init(){
     Eigen::Matrix3Xf mat = getLidarData();
-    // Conversion to nodes is not yet needed
+    // Conversion to nodes is not yet needed or may not be needed at all
     // Node* nodes = matToNodes();
     // std::cout << "s: " << nodes[0].label << std::endl;
 
@@ -21,7 +28,6 @@ void Map::init(){
     setEndVector(mat.col(mat.cols()-1));
 
     // Only needed when pathfinding is going to be implemented
-    // even then, think of a better way due to complexity
     // setAllNodes(nodes);
     // setRobotNode(initRobotPositionNode());
     // setStartNode(initStartPositionNode());
@@ -99,14 +105,16 @@ Node Map::initEndPositionNode(){
         return node;
 }
 
-/* Plan so far: put the robots current position on a 2d map pure for pathfinding 
- and maybe for 2d map visualisation */
+/* TODO: put the robots current position on a 2d map pure for pathfinding 
+ and maybe for 2d map visualisation 
+ (Not required, but might be nice) */
 void Map::fillMapWithCoordinates(){
 
 }
 
-/* Plan so far: all the current points in the pointcloud (with their labels (obstacle, path, wall))
+/* TODO: all the current points in the pointcloud (with their labels (obstacle, path, wall))
  on the 2d map pure for pathfinding, and maybe for 2d map visualisation */
+// find a way to make a local map containing every coordinate and label
 void Map::fillMapWithPointCloud(){
 
 }
@@ -116,7 +124,7 @@ void Map::updateRobotPosition(Eigen::Vector3f new_robot_position){
     setRobotPositionVector(new_robot_position);
 }
 
-/* Make the current map empty, not needed atm */ 
+/* Make the current map empty, not used at the moment */ 
 void Map::empty(){
 
 }
